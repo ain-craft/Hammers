@@ -1,0 +1,4 @@
+name: ForgeHammers
+version: '${project.version}'
+main: mintychochip.forgehammers.ForgeHammers
+api-version: '1.20'
