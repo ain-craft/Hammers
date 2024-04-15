@@ -1,48 +1,61 @@
 package mintychochip.forgehammers;
 
+import com.google.gson.annotations.SerializedName;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 public abstract class Hammer implements IHammer, Activatable {
+    @SerializedName("material")
     protected final Material material;
+    @SerializedName("active")
     protected boolean active;
-    private Hammer(Material material) {
+    @SerializedName("type")
+    protected HammerType hammerType;
+
+    private Hammer(Material material, HammerType hammerType) {
         this.material = material;
+        this.hammerType = hammerType;
     }
+
     @Override
     public boolean isActive() {
         return active;
     }
+
     @Override
     public void setActive(boolean b) {
         this.active = b;
     }
+
     @Override
     public Material getMaterial() {
         return material;
     }
-    public static class Traditional extends Hammer {
 
+    @Override
+    public HammerType getType() {
+        return hammerType;
+    }
+
+    public static class Traditional extends Hammer {
+        @SerializedName("radius")
         private int radius;
-        public Traditional(int radius, Material material) {
-            super(material);
+
+        public Traditional(int radius, Material material, HammerType hammerType) {
+            super(material, hammerType);
             this.radius = radius;
         }
-        public Traditional create(int radius, Material material) {
-           if(material == Material.AIR) {
-               return null;
-           }
-           return new Hammer.Traditional(radius,material);
+
+        public Traditional create(int radius, Material material, HammerType hammerType) {
+            if (material == Material.AIR) {
+                return null;
+            }
+            return new Hammer.Traditional(radius, material, hammerType);
         }
 
         public int getRadius() {
             return radius;
-        }
-
-        @Override
-        public HammerType getType() {
-            return HammerType.TRAD;
         }
 
         @Override

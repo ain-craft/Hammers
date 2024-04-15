@@ -51,8 +51,8 @@
 
     <repositories>
         <repository>
-            <id>sk89q-repo</id>
-            <url>https://maven.enginehub.org/repo/</url>
+            <id>jitpack.io</id>
+            <url>https://www.jitpack.io</url>
         </repository>
         <repository>
             <id>glaremasters repo</id>
@@ -69,6 +69,16 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>com.github.mintychochip</groupId>
+            <artifactId>genesis</artifactId>
+            <version>genesis1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.9.1</version> <!-- Make sure to use the latest version -->
+        </dependency>
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
