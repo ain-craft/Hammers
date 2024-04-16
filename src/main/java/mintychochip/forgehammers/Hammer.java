@@ -1,66 +1,58 @@
 package mintychochip.forgehammers;
 
 import com.google.gson.annotations.SerializedName;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
+import mintychochip.genesis.items.interfaces.Embeddable;
+import org.bukkit.NamespacedKey;
 
-public abstract class Hammer implements IHammer, Activatable {
-    @SerializedName("material")
-    protected final Material material;
-    @SerializedName("active")
-    protected boolean active;
-    @SerializedName("type")
-    protected HammerType hammerType;
+public abstract class Hammer implements IHammer, Embeddable {
 
-    private Hammer(Material material, HammerType hammerType) {
-        this.material = material;
-        this.hammerType = hammerType;
+  @SerializedName("deserialization-type")
+  protected String deserializationType;
+
+  private Hammer(String deserializationType) {
+    this.deserializationType = deserializationType;
+  }
+
+  @Override
+  public NamespacedKey getKey() {
+    return Constants.HAMMER_KEY;
+  }
+
+  @Override
+  public String getSimpleKey() {
+    return "hammer";
+  }
+
+  @Override
+  public String getDeserializationType() {
+    return deserializationType;
+  }
+
+  public void setDeserializationType(String deserializationType) {
+    this.deserializationType = deserializationType;
+  }
+
+  public static class Traditional extends Hammer {
+
+    @SerializedName("radius")
+    private int radius;
+
+    private Traditional(int radius, String deserializationType) {
+      super(deserializationType);
+      this.radius = radius;
     }
 
-    @Override
-    public boolean isActive() {
-        return active;
+    public static Traditional create(int radius, HammerType hammerType) {
+      //add some deserializationtype validation
+      return new Hammer.Traditional(radius, hammerType.getDeserializationType());
     }
 
-    @Override
-    public void setActive(boolean b) {
-        this.active = b;
+    public int getRadius() {
+      return radius;
     }
 
-    @Override
-    public Material getMaterial() {
-        return material;
+    public void setRadius(int radius) {
+      this.radius = radius;
     }
-
-    @Override
-    public HammerType getType() {
-        return hammerType;
-    }
-
-    public static class Traditional extends Hammer {
-        @SerializedName("radius")
-        private int radius;
-
-        public Traditional(int radius, Material material, HammerType hammerType) {
-            super(material, hammerType);
-            this.radius = radius;
-        }
-
-        public Traditional create(int radius, Material material, HammerType hammerType) {
-            if (material == Material.AIR) {
-                return null;
-            }
-            return new Hammer.Traditional(radius, material, hammerType);
-        }
-
-        public int getRadius() {
-            return radius;
-        }
-
-        @Override
-        public void accept(Location location, Player player) {
-
-        }
-    }
+  }
 }

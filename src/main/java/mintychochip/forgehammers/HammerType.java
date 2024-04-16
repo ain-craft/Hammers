@@ -1,16 +1,15 @@
 package mintychochip.forgehammers;
 
 public enum HammerType {
-    TRAD("traditional"),
-    PATTERNED("patterned");
+  TRADITIONAL("traditional");
 
-    private final String key;
+  private final String deserializationType;
 
-    HammerType(String key) {
-        this.key = key;
-    }
+  HammerType(String deserializationType) {
+    this.deserializationType = deserializationType;
+  }
 
-    public String getKey() {
-        return key;
-    }
+  public String getDeserializationType() {
+    return deserializationType;
+  }
 }
