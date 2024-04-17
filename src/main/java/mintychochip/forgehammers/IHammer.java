@@ -1,20 +1,10 @@
 package mintychochip.forgehammers;
 
-import javafx.scene.paint.Material;
-import org.bukkit.block.Block;
-
-import java.util.List;
+import org.bukkit.Material;
 
 public interface IHammer {
-
+    void setDeserializationType(String deserializationType);
     String getDeserializationType();
-
-    float getHardness();
-
-    List<String> getBlacklist();
-
     boolean materialBlacklisted(Material material);
-
-    boolean blockBlacklisted(Block block); //proxy
+    float getHardness();
 }
-

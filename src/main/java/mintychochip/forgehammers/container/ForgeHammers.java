@@ -1,14 +1,20 @@
 package mintychochip.forgehammers.container;
 
+import java.util.Arrays;
+import java.util.List;
+import mintychochip.forgehammers.BreakListener;
+import mintychochip.forgehammers.Constants;
 import mintychochip.forgehammers.GrasperImpl;
 import mintychochip.forgehammers.HammerListener;
+import mintychochip.forgehammers.PreBreakListener;
 import mintychochip.forgehammers.commands.ForgeHammerCreation;
-import mintychochip.forgehammers.commands.SetRadiusCommand;
+import mintychochip.forgehammers.commands.ForgeHammerRadius;
 import mintychochip.forgehammers.config.HammerConfig;
 import mintychochip.forgehammers.typeadapter.RuntimeTypeAdapterFactory;
 import mintychochip.genesis.commands.abstraction.GenericMainCommandManager;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class ForgeHammers extends JavaPlugin {
@@ -22,20 +28,19 @@ public final class ForgeHammers extends JavaPlugin {
   @Override
   public void onEnable() {
     // Plugin startup logic
-    final String DESER_TYPE_STRING = "deserialization-type";
     instance = this;
     RuntimeTypeAdapterFactory<Hammer> hammerFactory = RuntimeTypeAdapterFactory.of(Hammer.class,
-        DESER_TYPE_STRING).registerSubtype(Hammer.Traditional.class, "traditional");
+        Constants.DESERIALIZATION_TYPE).registerSubtype(Hammer.Traditional.class, "traditional");
     NamespacedKey hammerKey = new NamespacedKey(this, "hammer");
     GrasperImpl grasper = new GrasperImpl(hammerFactory, hammerKey);
-    Bukkit.getPluginManager().registerEvents(new HammerListener(this, grasper), this);
+    List<Listener> listeners = Arrays.asList(new BreakListener(this),new PreBreakListener(this), new HammerListener(this,grasper));
     HammerConfig hammerConfig = new HammerConfig("hammer.yml", this);
     GenericMainCommandManager genericMainCommandManager = new GenericMainCommandManager("forge",
         "asd");
     genericMainCommandManager.addSubCommand(
         new ForgeHammerCreation("hammer", "asd", hammerConfig, grasper));
     genericMainCommandManager.addSubCommand(
-        new SetRadiusCommand("radius", "sets radius", hammerConfig, grasper));
+        new ForgeHammerRadius("radius", "sets radius", hammerConfig, grasper));
     getCommand("forge").setExecutor(genericMainCommandManager);
   }
 

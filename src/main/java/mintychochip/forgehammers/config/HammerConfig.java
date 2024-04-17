@@ -2,6 +2,7 @@ package mintychochip.forgehammers.config;
 
 import mintychochip.genesis.config.abstraction.GenericConfig;
 import mintychochip.genesis.config.abstraction.GenesisConfigurationSection;
+import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class HammerConfig extends GenericConfig {
@@ -14,7 +15,11 @@ public class HammerConfig extends GenericConfig {
     return this.getMainConfigurationSection("items." + key);
   }
 
+
   public String getMessage(String key) {
     return this.getString("messages." + key);
   }
+
+  //will be moved later
+
 }

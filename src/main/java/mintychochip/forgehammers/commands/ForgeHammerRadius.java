@@ -1,9 +1,9 @@
 package mintychochip.forgehammers.commands;
 
 import mintychochip.forgehammers.Grasper;
+import mintychochip.forgehammers.config.HammerConfig;
 import mintychochip.forgehammers.container.Hammer;
 import mintychochip.forgehammers.container.Hammer.Traditional;
-import mintychochip.forgehammers.config.HammerConfig;
 import mintychochip.genesis.commands.abstraction.GenericCommandObject;
 import mintychochip.genesis.commands.abstraction.SubCommand;
 import org.bukkit.Material;
@@ -11,12 +11,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-public class SetRadiusCommand extends GenericCommandObject implements SubCommand {
-
+public class ForgeHammerRadius extends GenericCommandObject implements SubCommand {
   private final HammerConfig hammerConfig;
   private final Grasper grasper;
 
-  public SetRadiusCommand(String executor, String description, HammerConfig hammerConfig,
+  public ForgeHammerRadius(String executor, String description, HammerConfig hammerConfig,
       Grasper grasper) {
     super(executor, description);
     this.hammerConfig = hammerConfig;

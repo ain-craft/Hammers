@@ -1,15 +1,13 @@
 package mintychochip.forgehammers.commands;
 
-import mintychochip.forgehammers.container.ForgeHammers;
 import mintychochip.forgehammers.Grasper;
-import mintychochip.forgehammers.container.Hammer.Traditional;
-import mintychochip.forgehammers.container.HammerType;
 import mintychochip.forgehammers.config.HammerConfig;
+import mintychochip.forgehammers.container.ForgeHammers;
+import mintychochip.forgehammers.container.Hammer;
 import mintychochip.genesis.commands.abstraction.GenericCommandObject;
 import mintychochip.genesis.commands.abstraction.SubCommand;
 import mintychochip.genesis.config.abstraction.GenesisConfigurationSection;
 import mintychochip.genesis.items.container.AbstractItem;
-import mintychochip.genesis.items.container.AbstractItem.ConfigurationItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -37,11 +35,11 @@ public class ForgeHammerCreation extends GenericCommandObject implements SubComm
     if (hammer.isNull()) {
       return false;
     }
-    AbstractItem abstractItem = new ConfigurationItemBuilder(ForgeHammers.getInstance(),
+    AbstractItem abstractItem = new AbstractItem.ConfigurationItemBuilder(
+        ForgeHammers.getInstance(),
         Material.DIAMOND_PICKAXE, hammer, false).defaultBuild();
     ItemStack itemStack = abstractItem.getItemStack();
-    grasper.toss(itemStack, Traditional.create(2,
-        HammerType.TRADITIONAL));
+    grasper.toss(itemStack, Hammer.Traditional.create(2, 4.5f, hammer.getStringList("black-list")));
     player.getInventory().addItem(itemStack);
     return true;
   }

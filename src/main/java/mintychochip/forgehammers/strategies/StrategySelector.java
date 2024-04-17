@@ -7,7 +7,7 @@ public interface StrategySelector {
 
     default HammerStrategy selectStrategy(Hammer hammer) {
         if (hammer instanceof Traditional) {
-            return new TraditionalHammerStrategy();
+            return TraditionalHammerStrategy.INSTANCE;
         }
         return null;
     }

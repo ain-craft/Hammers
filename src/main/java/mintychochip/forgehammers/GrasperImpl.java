@@ -8,6 +8,7 @@ import mintychochip.forgehammers.typeadapter.RuntimeTypeAdapterFactory;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -58,5 +59,19 @@ public class GrasperImpl implements Grasper {
   @Override
   public ItemStack getItemInUse(ItemStack main, ItemStack off) {
     return main.getType() == Material.AIR ? off : main;
+  }
+
+  @Override
+  public Hammer grab(PlayerInventory playerInventory) {
+    ItemStack itemInUse = getItemInUse(playerInventory.getItemInMainHand(),
+        playerInventory.getItemInOffHand());
+    if (itemInUse.getType() == Material.AIR) {
+      return null;
+    }
+    Hammer grab = this.grab(itemInUse);
+    if (grab == null) {
+      return null;
+    }
+    return grab;
   }
 }

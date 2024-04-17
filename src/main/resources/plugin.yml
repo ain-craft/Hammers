@@ -5,3 +5,26 @@ api-version: '1.20'
 commands:
   forge:
     description: asdasd
+permissions:
+  forge.*:
+    default: op
+    description: All permissions
+    children:
+      forge.hammer: true
+      forge.ore: true
+  forge.hammer:
+    default: false
+    description: All hammer permissions
+    children:
+      forge.hammer.allow: true
+  forge.ore:
+    default: false
+    description: All ore permissions
+    children:
+      forge.ore.prevent: true
+  forge.hammer.allow:
+    description: allows the use of hammers
+    default: false
+  forge.ore.prevent:
+    description: prevents the mining of ores
+    default: false

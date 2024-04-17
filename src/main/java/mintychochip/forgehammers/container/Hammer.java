@@ -1,14 +1,13 @@
 package mintychochip.forgehammers.container;
 
 import com.google.gson.annotations.SerializedName;
+import java.util.List;
 import mintychochip.forgehammers.Constants;
 import mintychochip.forgehammers.IHammer;
 import mintychochip.genesis.items.interfaces.Embeddable;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
-
-import java.util.List;
 
 public abstract class Hammer implements IHammer, Embeddable {
 
@@ -26,15 +25,15 @@ public abstract class Hammer implements IHammer, Embeddable {
     this.hardness = hardness;
     this.blacklist = blacklist;
   }
-
-  @Override
   public boolean blockBlacklisted(Block block) {
     return this.materialBlacklisted(block.getType());
   }
+
   @Override
   public boolean materialBlacklisted(Material material) {
     return blacklist.stream().anyMatch(entry -> entry.equalsIgnoreCase(material.toString()));
   }
+
   @Override
   public NamespacedKey getKey() {
     return Constants.HAMMER_KEY;
@@ -58,22 +57,22 @@ public abstract class Hammer implements IHammer, Embeddable {
   public void setDeserializationType(String deserializationType) {
     this.deserializationType = deserializationType;
   }
-
-  public static class Traditional extends Hammer {
-
+  public final static class Traditional extends Hammer {
     @SerializedName("radius")
     private int radius;
 
-    private Traditional(int radius, String deserializationType) {
-      super(deserializationType);
+    private Traditional(int radius, String deserializationType, float hardness,
+        List<String> blacklist) {
+      super(deserializationType,hardness,blacklist);
       this.radius = radius;
     }
 
-    public static Traditional create(int radius, HammerType hammerType) {
-      if(radius < 0) {
+    public static Traditional create(int radius, float hardness,
+        List<String> blacklist) {
+      if (radius < 0) {
         radius = 1;
       }
-      return new Hammer.Traditional(radius, hammerType.getDeserializationType());
+      return new Traditional(radius, HammerType.TRADITIONAL.getDeserializationType(), hardness, blacklist);
     }
 
     public int getRadius() {
