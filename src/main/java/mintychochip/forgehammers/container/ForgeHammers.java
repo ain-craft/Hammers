@@ -12,7 +12,6 @@ import mintychochip.forgehammers.commands.ForgeHammerRadius;
 import mintychochip.forgehammers.config.HammerConfig;
 import mintychochip.forgehammers.typeadapter.RuntimeTypeAdapterFactory;
 import mintychochip.genesis.commands.abstraction.GenericMainCommandManager;
-import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -30,10 +29,13 @@ public final class ForgeHammers extends JavaPlugin {
     // Plugin startup logic
     instance = this;
     RuntimeTypeAdapterFactory<Hammer> hammerFactory = RuntimeTypeAdapterFactory.of(Hammer.class,
-        Constants.DESERIALIZATION_TYPE).registerSubtype(Hammer.Traditional.class, "traditional");
+            Constants.DESERIALIZATION_TYPE)
+        .registerSubtype(Hammer.Traditional.class, "traditional")
+        .registerSubtype(Hammer.Patterned.class, "patterned");
     NamespacedKey hammerKey = new NamespacedKey(this, "hammer");
     GrasperImpl grasper = new GrasperImpl(hammerFactory, hammerKey);
-    List<Listener> listeners = Arrays.asList(new BreakListener(this),new PreBreakListener(this), new HammerListener(this,grasper));
+    List<Listener> listeners = Arrays.asList(new BreakListener(this), new PreBreakListener(this),
+        new HammerListener(this, grasper));
     HammerConfig hammerConfig = new HammerConfig("hammer.yml", this);
     GenericMainCommandManager genericMainCommandManager = new GenericMainCommandManager("forge",
         "asd");

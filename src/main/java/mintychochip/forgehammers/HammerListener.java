@@ -4,12 +4,12 @@ import mintychochip.forgehammers.container.ForgeHammers;
 import mintychochip.forgehammers.container.Hammer;
 import mintychochip.forgehammers.events.HammerPreBreakEvent;
 import mintychochip.forgehammers.strategies.StrategySelector;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -39,8 +39,11 @@ public class HammerListener extends AbstractListener implements StrategySelector
     if (grab == null) {
       return;
     }
-    this.selectStrategy(grab).accept(event.getBlock().getLocation(), player, grab, block -> {
-      Bukkit.getPluginManager().callEvent(new HammerPreBreakEvent(block, player, grab, itemInUse));
+    final Block origin = event.getBlock();
+    final float originHardness = origin.getType().getHardness();
+    this.selectStrategy(grab).accept(origin.getLocation(), player, grab, block -> {
+      Bukkit.getPluginManager().callEvent(new HammerPreBreakEvent(block,player, grab, itemInUse,
+          originHardness));
     });
   }
 

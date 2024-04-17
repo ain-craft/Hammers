@@ -1,6 +1,9 @@
 package mintychochip.forgehammers.events;
 
 import mintychochip.forgehammers.container.Hammer;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -13,10 +16,19 @@ public final class HammerPreBreakEvent extends ForgeBreakBaseEvent implements Pr
     private boolean cancelled = false;
 
     private final ItemStack itemStack;
-    public HammerPreBreakEvent(Block block, Player player, Hammer hammer, ItemStack itemStack) {
-        super(block, player);
+    private final float originHardness;
+    private final Block block;
+    public HammerPreBreakEvent(Block block,Player player, Hammer hammer, ItemStack itemStack, float originHardness) {
+        super(player);
+        this.block = block;
         this.hammer = hammer;
         this.itemStack = itemStack;
+        this.originHardness = originHardness;
+    }
+
+    @Override
+    public float getOriginHardness() {
+        return originHardness;
     }
 
     @Override
@@ -37,5 +49,10 @@ public final class HammerPreBreakEvent extends ForgeBreakBaseEvent implements Pr
     @Override
     public void setCancelled(boolean b) {
         this.cancelled = b;
+    }
+
+    @Override
+    public Block getBlock() {
+        return block;
     }
 }

@@ -8,7 +8,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 
 public final class PreBreakListener extends AbstractListener {
 
@@ -27,39 +26,45 @@ public final class PreBreakListener extends AbstractListener {
       return;
     }
     Bukkit.getPluginManager()
-        .callEvent(new HammerBreakEvent(event.getBlock(), event.getPlayer(), event.getItemStack()));
+        .callEvent(new HammerBreakEvent(event.getPlayer(),event.getItemStack(),event.getBlock()));
   }
 
-  //@EventHandler(priority = EventPriority.HIGH)
-  private void playerDoesNotHaveLineOfSight(final HammerPreBreakEvent event) {
+  @EventHandler(priority = EventPriority.LOW)
+  private void onBlockIsUnbreakable(final HammerPreBreakEvent event) {
     if(event.isCancelled()) {
       return;
     }
-    if(!event.getPlayer().hasLineOfSight(event.getBlock().getLocation())) {
-      event.setCancelled(true);
-    }
-  }
-  @EventHandler(priority = EventPriority.HIGH)
-  private void onBlockIsUnbreakable(final HammerPreBreakEvent event) {
     Material type = event.getBlock().getType();
-    Bukkit.broadcast(Component.text(type.toString() + " " + type.getHardness()));
-    if (type.isAir() || type == Material.BEDROCK) {
+    if (type == Material.BEDROCK) {
       event.setCancelled(true);
     }
   }
 
   @EventHandler(priority = EventPriority.HIGH)
+  private void onOriginHardnessIsHigher(final HammerPreBreakEvent event) {
+    if (event.isCancelled()) {
+      return;
+    }
+    float originHardness = event.getOriginHardness();
+    float hardness = event.getBlock().getType().getHardness();
+    Bukkit.broadcastMessage(originHardness + " " + hardness);
+    if (originHardness < event.getBlock().getType().getHardness()) {
+      Bukkit.broadcast(Component.text("hardness cancelled"));
+      event.setCancelled(true);
+    }
+  }
+
+  @EventHandler(priority = EventPriority.LOW)
   private void onBlockIsTooHard(final HammerPreBreakEvent event) {
     if (event.isCancelled()) {
       return;
     }
     Material type = event.getBlock().getType();
-    if (type.getHardness() > event.getHammer().getHardness()) {
+    if (type.getHardness() > event.getHammer().getStrength()) {
       event.setCancelled(true);
     }
   }
-
-  @EventHandler(priority = EventPriority.HIGH)
+  @EventHandler(priority = EventPriority.LOWEST)
   private void onBlockIsBlacklisted(final HammerPreBreakEvent event) {
     if (event.isCancelled()) {
       return;

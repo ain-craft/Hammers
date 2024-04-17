@@ -1,7 +1,8 @@
 package mintychochip.forgehammers.container;
 
 public enum HammerType {
-  TRADITIONAL("traditional");
+  TRADITIONAL("traditional"),
+  PATTERNED("patterned");
 
   private final String deserializationType;
 

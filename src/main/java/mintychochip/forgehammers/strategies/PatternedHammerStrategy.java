@@ -8,6 +8,11 @@ import org.bukkit.entity.Player;
 
 public final class PatternedHammerStrategy implements HammerStrategy {
 
+    public static final PatternedHammerStrategy INSTANCE = new PatternedHammerStrategy();
+
+    private PatternedHammerStrategy() {
+
+    }
 
     @Override
     public void accept(Location origin, Player player, Hammer hammer,

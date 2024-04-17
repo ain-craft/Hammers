@@ -5,8 +5,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
 public interface PostfacingBlockEvent extends Listener, BlockEvent {
-
-
     ItemStack getItemStack();
     Player getPlayer(); // for incrementation
 }

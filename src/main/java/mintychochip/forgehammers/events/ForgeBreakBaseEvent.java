@@ -1,6 +1,8 @@
 package mintychochip.forgehammers.events;
 
 import mintychochip.genesis.events.AbstractEvent;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -12,12 +14,12 @@ public abstract class ForgeBreakBaseEvent extends AbstractEvent {
      * Post event, is only called by 'ForgePreBlockBreakEvent'
      */
 
-    protected final Block block;
 
     protected final Player player;
 
-    protected ForgeBreakBaseEvent(Block block, Player player) {
-        this.block = block;
+    protected Block block;
+
+    protected ForgeBreakBaseEvent(Player player) {
         this.player = player;
     }
 
@@ -25,7 +27,4 @@ public abstract class ForgeBreakBaseEvent extends AbstractEvent {
         return player;
     }
 
-    public Block getBlock() {
-        return block;
-    }
 }

@@ -4,6 +4,7 @@ import mintychochip.forgehammers.Grasper;
 import mintychochip.forgehammers.config.HammerConfig;
 import mintychochip.forgehammers.container.ForgeHammers;
 import mintychochip.forgehammers.container.Hammer;
+import mintychochip.forgehammers.container.ToolMaterial;
 import mintychochip.genesis.commands.abstraction.GenericCommandObject;
 import mintychochip.genesis.commands.abstraction.SubCommand;
 import mintychochip.genesis.config.abstraction.GenesisConfigurationSection;
@@ -39,7 +40,7 @@ public class ForgeHammerCreation extends GenericCommandObject implements SubComm
         ForgeHammers.getInstance(),
         Material.DIAMOND_PICKAXE, hammer, false).defaultBuild();
     ItemStack itemStack = abstractItem.getItemStack();
-    grasper.toss(itemStack, Hammer.Traditional.create(2, 4.5f, hammer.getStringList("black-list")));
+    grasper.toss(itemStack, Hammer.Traditional.create(2, ToolMaterial.DIAMOND.getHardness(), hammer.getStringList("black-list")));
     player.getInventory().addItem(itemStack);
     return true;
   }
