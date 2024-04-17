@@ -14,22 +14,22 @@ import org.bukkit.event.EventPriority;
 
 public final class PreBreakListener extends AbstractListener {
 
-  Predicate<HammerPreBreakEvent> blockIsUnbreakable = event -> {
+  private final Predicate<HammerPreBreakEvent> blockIsUnbreakable = event -> {
     Material type = event.getBlock().getType();
     return type == Material.BEDROCK;
   };
-  Predicate<HammerPreBreakEvent> blockTooHard = event -> {
+  private final Predicate<HammerPreBreakEvent> blockTooHard = event -> {
     Material type = event.getBlock().getType();
     return type.getHardness() > event.getHammer().getStrength();
   };
 
-  Predicate<HammerPreBreakEvent> blockBlacklisted = event -> event.getHammer()
+  private final Predicate<HammerPreBreakEvent> blockBlacklisted = event -> event.getHammer()
       .blockBlacklisted(event.getBlock());
-  Predicate<HammerPreBreakEvent> blockIsOre = event -> {
+  private final Predicate<HammerPreBreakEvent> blockIsOre = event -> {
     Material type = event.getBlock().getType();
     return Constants.ORE_MATERIALS.contains(type);
   };
-  Predicate<HammerPreBreakEvent> blockIsLowerThanOriginHardness = event -> {
+  private final Predicate<HammerPreBreakEvent> blockIsLowerThanOriginHardness = event -> {
     float originHardness = event.getOriginHardness();
     return originHardness < event.getBlock().getType().getHardness();
   };
