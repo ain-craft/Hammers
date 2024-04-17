@@ -1,4 +1,4 @@
-package mintychochip.forgehammers;
+package mintychochip.forgehammers.container;
 
 public enum HammerType {
   TRADITIONAL("traditional");

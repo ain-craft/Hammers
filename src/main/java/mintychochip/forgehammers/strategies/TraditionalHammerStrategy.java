@@ -1,10 +1,12 @@
 package mintychochip.forgehammers.strategies;
 
-import mintychochip.forgehammers.Hammer;
+import mintychochip.forgehammers.container.Hammer;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
+
+import java.util.function.Consumer;
 
 public final class TraditionalHammerStrategy implements HammerStrategy {
     enum Cardinal {
@@ -12,7 +14,7 @@ public final class TraditionalHammerStrategy implements HammerStrategy {
     }
 
     @Override
-    public void accept(Location location, Player player, Hammer hammer) {
+    public void accept(Location location, Player player, Hammer hammer, Consumer<Block> blockConsumer) {
         if (!(hammer instanceof Hammer.Traditional traditional)) {
             return;
         }
@@ -25,8 +27,7 @@ public final class TraditionalHammerStrategy implements HammerStrategy {
                     case EAST_WEST -> new Vector(0, offset, j);
                     case NORTH_SOUTH -> new Vector(offset, j, 0);
                 };
-                Block block = location.clone().add(v).getBlock();
-                block.breakNaturally();
+                blockConsumer.accept(location.clone().add(v).getBlock());
             }
         }
     }

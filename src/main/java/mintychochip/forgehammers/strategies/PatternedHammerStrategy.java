@@ -1,6 +1,6 @@
 package mintychochip.forgehammers.strategies;
 
-import mintychochip.forgehammers.Hammer;
+import mintychochip.forgehammers.container.Hammer;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 

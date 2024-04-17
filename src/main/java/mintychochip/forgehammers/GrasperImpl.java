@@ -3,6 +3,7 @@ package mintychochip.forgehammers;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
+import mintychochip.forgehammers.container.Hammer;
 import mintychochip.forgehammers.typeadapter.RuntimeTypeAdapterFactory;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;

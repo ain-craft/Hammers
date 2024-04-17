@@ -1,7 +1,7 @@
 package mintychochip.forgehammers.strategies;
 
-import mintychochip.forgehammers.Hammer;
-import mintychochip.forgehammers.Hammer.Traditional;
+import mintychochip.forgehammers.container.Hammer;
+import mintychochip.forgehammers.container.Hammer.Traditional;
 
 public interface StrategySelector {
 

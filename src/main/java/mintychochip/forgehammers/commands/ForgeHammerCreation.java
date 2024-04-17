@@ -1,9 +1,9 @@
 package mintychochip.forgehammers.commands;
 
-import mintychochip.forgehammers.ForgeHammers;
+import mintychochip.forgehammers.container.ForgeHammers;
 import mintychochip.forgehammers.Grasper;
-import mintychochip.forgehammers.Hammer.Traditional;
-import mintychochip.forgehammers.HammerType;
+import mintychochip.forgehammers.container.Hammer.Traditional;
+import mintychochip.forgehammers.container.HammerType;
 import mintychochip.forgehammers.config.HammerConfig;
 import mintychochip.genesis.commands.abstraction.GenericCommandObject;
 import mintychochip.genesis.commands.abstraction.SubCommand;

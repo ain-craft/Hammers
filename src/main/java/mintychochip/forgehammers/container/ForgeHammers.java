@@ -1,5 +1,7 @@
-package mintychochip.forgehammers;
+package mintychochip.forgehammers.container;
 
+import mintychochip.forgehammers.GrasperImpl;
+import mintychochip.forgehammers.HammerListener;
 import mintychochip.forgehammers.commands.ForgeHammerCreation;
 import mintychochip.forgehammers.commands.SetRadiusCommand;
 import mintychochip.forgehammers.config.HammerConfig;

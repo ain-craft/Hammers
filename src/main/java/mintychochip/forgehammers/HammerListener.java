@@ -1,5 +1,8 @@
 package mintychochip.forgehammers;
 
+import mintychochip.forgehammers.container.ForgeHammers;
+import mintychochip.forgehammers.container.Hammer;
+import mintychochip.forgehammers.events.HammerPreBreakEvent;
 import mintychochip.forgehammers.strategies.StrategySelector;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -33,7 +36,9 @@ public class HammerListener implements Listener, StrategySelector {
         if(grab == null) {
             return;
         }
-        this.selectStrategy(grab).accept(event.getBlock().getLocation(), player, grab);
+        this.selectStrategy(grab).accept(event.getBlock().getLocation(), player, grab, block -> {
+            new HammerPreBreakEvent(block,player,grab,itemInUse);
+        });
     }
 
 }

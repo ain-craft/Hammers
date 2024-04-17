@@ -1,5 +1,6 @@
 package mintychochip.forgehammers;
 
+import mintychochip.forgehammers.container.Hammer;
 import org.bukkit.inventory.ItemStack;
 
 public interface Grasper {
