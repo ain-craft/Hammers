@@ -48,37 +48,19 @@ public final class TraditionalHammerStrategy implements HammerStrategy {
     final int radius = traditional.getRadius();
     for (int offset = -radius; offset <= radius; offset++) {
       for (int j = -radius; j <= radius; j++) {
-        final Cardinal blockFaceCardinal = this.getCardinal(blockFace);
-        final Cardinal playerCardinal = this.getCardinalFromPlayerDirection(player);
-
-        Cardinal cardinal = blockFaceCardinal;
-        if (playerCardinal != null && playerCardinal != blockFaceCardinal) {
-          cardinal = playerCardinal;
-        }
-        Vector v = switch (cardinal) {
+        final Vector v = switch (this.getCardinalFromBlockFace(blockFace)) {
           case UP_DOWN -> new Vector(offset, 0, j);
           case EAST_WEST -> new Vector(0, offset, j);
           case NORTH_SOUTH -> new Vector(offset, j, 0);
         };
-        blockConsumer.accept(origin.clone().add(v).getBlock());
+        final Location add = origin.clone().add(v);
+        if (!add.equals(origin)) {
+          blockConsumer.accept(add.getBlock());
+        }
       }
     }
   }
-
-  private Cardinal getCardinalFromPlayerDirection(Player player) {
-    final Location playerLocation = player.getLocation();
-    final float pitch = playerLocation.getPitch();
-    final float yaw = (playerLocation.getYaw() + 360) % 360;
-    if (Math.abs(pitch) > 32.5) {
-      return Cardinal.UP_DOWN;
-    }
-    if (yaw >= 45 && yaw < 135 || yaw >= 225 && yaw < 315) {
-      return Cardinal.EAST_WEST;
-    }
-    return Cardinal.NORTH_SOUTH;
-  }
-
-  private Cardinal getCardinal(BlockFace blockFace) {
+  private Cardinal getCardinalFromBlockFace(BlockFace blockFace) {
     return switch (blockFace) {
       case UP, DOWN -> Cardinal.UP_DOWN;
       case EAST, WEST -> Cardinal.EAST_WEST;

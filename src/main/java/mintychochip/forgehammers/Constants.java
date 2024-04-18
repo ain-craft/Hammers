@@ -39,13 +39,13 @@ public class Constants {
           material -> material.toString().contains("_ORE"))
       .toList();
   public final Set<Material> PICKAXE;
-  public final Set<Material> SHOVEL = new HashSet<>();
+  public final Set<Material> SHOVEL = null;
   private Constants() {
     PICKAXE = this.getMaterialsFromStringList(
         List.of("STONE", "DEEPSLATE", "GRANITE", "ANDESITE", "DIORITE", "TUFF", "CALCITE",
             "NETHERRACK", "NYLIUM", "TERRACOTTA", "GLASS", "ICE", "BRICK", "PRISMARINE", "BASALT",
             "PURPUR", "MAGMA", "CORAL", "COPPER", "IRON", "GOLD", "DIAMOND", "EMERALD", "NETHERITE",
-            "AMETHYST","CONCRETE"));
+            "AMETHYST","CONCRETE", "OBSIDIAN"));
     PICKAXE.removeAll(this.getMaterialsFromStringList(List.of("CONCRETE_POWDER")));
   }
   private Set<Material> getMaterialsFromStringList(List<String> filters) {
