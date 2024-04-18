@@ -20,31 +20,41 @@
 package mintychochip.forgehammers.strategies;
 
 import java.util.function.Consumer;
-import mintychochip.forgehammers.container.Hammer;
+import mintychochip.forgehammers.container.HammerLike;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
+import org.bukkit.block.BlockFace;
 import org.bukkit.util.Vector;
+import org.bukkit.entity.Player;
 
 public final class TraditionalHammerStrategy implements HammerStrategy {
 
   public static final TraditionalHammerStrategy INSTANCE = new TraditionalHammerStrategy();
+
   private TraditionalHammerStrategy() {
 
   }
+
   enum Cardinal {
     UP_DOWN, EAST_WEST, NORTH_SOUTH
   }
+
   @Override
-  public void accept(Location origin, Player player, Hammer hammer,
+  public void accept(Player player, BlockFace blockFace, Location origin, HammerLike hammerLike,
       Consumer<Block> blockConsumer) {
-    if (!(hammer instanceof Hammer.Traditional traditional)) {
+    if (!(hammerLike instanceof HammerLike.Traditional traditional)) {
       return;
     }
-    final Cardinal cardinal = this.getCardinal(player);
     final int radius = traditional.getRadius();
     for (int offset = -radius; offset <= radius; offset++) {
       for (int j = -radius; j <= radius; j++) {
+        final Cardinal blockFaceCardinal = this.getCardinal(blockFace);
+        final Cardinal playerCardinal = this.getCardinalFromPlayerDirection(player);
+
+        Cardinal cardinal = blockFaceCardinal;
+        if (playerCardinal != null && playerCardinal != blockFaceCardinal) {
+          cardinal = playerCardinal;
+        }
         Vector v = switch (cardinal) {
           case UP_DOWN -> new Vector(offset, 0, j);
           case EAST_WEST -> new Vector(0, offset, j);
@@ -55,7 +65,7 @@ public final class TraditionalHammerStrategy implements HammerStrategy {
     }
   }
 
-  private Cardinal getCardinal(Player player) {
+  private Cardinal getCardinalFromPlayerDirection(Player player) {
     final Location playerLocation = player.getLocation();
     final float pitch = playerLocation.getPitch();
     final float yaw = (playerLocation.getYaw() + 360) % 360;
@@ -66,5 +76,14 @@ public final class TraditionalHammerStrategy implements HammerStrategy {
       return Cardinal.EAST_WEST;
     }
     return Cardinal.NORTH_SOUTH;
+  }
+
+  private Cardinal getCardinal(BlockFace blockFace) {
+    return switch (blockFace) {
+      case UP, DOWN -> Cardinal.UP_DOWN;
+      case EAST, WEST -> Cardinal.EAST_WEST;
+      case NORTH, SOUTH -> Cardinal.NORTH_SOUTH;
+      default -> null;
+    };
   }
 }

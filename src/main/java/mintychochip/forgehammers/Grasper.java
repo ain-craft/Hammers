@@ -19,17 +19,17 @@
 
 package mintychochip.forgehammers;
 
-import mintychochip.forgehammers.container.Hammer;
+import mintychochip.forgehammers.container.HammerLike;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 public interface Grasper {
 
-    boolean toss(ItemStack itemStack, Hammer hammer);
+    boolean toss(ItemStack itemStack, HammerLike hammerLike);
 
-    Hammer grab(ItemStack itemStack);
+    HammerLike grab(ItemStack itemStack);
 
     ItemStack getItemInUse(ItemStack main, ItemStack off);
 
-    Hammer grab(PlayerInventory playerInventory);
+    HammerLike grab(PlayerInventory playerInventory);
 }

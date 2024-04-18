@@ -22,7 +22,7 @@ package mintychochip.forgehammers;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
-import mintychochip.forgehammers.container.Hammer;
+import mintychochip.forgehammers.container.HammerLike;
 import mintychochip.forgehammers.typeadapter.RuntimeTypeAdapterFactory;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -37,14 +37,14 @@ public class GrasperImpl implements Grasper {
   private final Gson gson;
   private final NamespacedKey hammerKey;
 
-  public GrasperImpl(RuntimeTypeAdapterFactory<Hammer> hammerFactory, NamespacedKey hammerKey) {
+  public GrasperImpl(RuntimeTypeAdapterFactory<HammerLike> hammerFactory, NamespacedKey hammerKey) {
     gson = new GsonBuilder().registerTypeAdapterFactory(hammerFactory).create();
     this.hammerKey = hammerKey;
   }
 
   @Override
-  public boolean toss(ItemStack itemStack, Hammer hammer) {
-    String json = gson.toJson(hammer);
+  public boolean toss(ItemStack itemStack, HammerLike hammerLike) {
+    String json = gson.toJson(hammerLike);
     if (json == null) {
       return false;
     }
@@ -55,7 +55,7 @@ public class GrasperImpl implements Grasper {
   }
 
   @Override
-  public Hammer grab(ItemStack itemStack) {
+  public HammerLike grab(ItemStack itemStack) {
     ItemMeta itemMeta = itemStack.getItemMeta();
     PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
     if (!pdc.has(hammerKey, PersistentDataType.STRING)) {
@@ -70,9 +70,9 @@ public class GrasperImpl implements Grasper {
     if (type == null) {
       return null;
     }
-    Hammer hammer = gson.fromJson(json, Hammer.class);
-    hammer.setDeserializationType(type);
-    return hammer;
+    HammerLike hammerLike = gson.fromJson(json, HammerLike.class);
+    hammerLike.setDeserializationType(type);
+    return hammerLike;
   }
 
   @Override
@@ -81,13 +81,13 @@ public class GrasperImpl implements Grasper {
   }
 
   @Override
-  public Hammer grab(PlayerInventory playerInventory) {
+  public HammerLike grab(PlayerInventory playerInventory) {
     ItemStack itemInUse = getItemInUse(playerInventory.getItemInMainHand(),
         playerInventory.getItemInOffHand());
     if (itemInUse.getType() == Material.AIR) {
       return null;
     }
-    Hammer grab = this.grab(itemInUse);
+    HammerLike grab = this.grab(itemInUse);
     if (grab == null) {
       return null;
     }

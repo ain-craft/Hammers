@@ -20,12 +20,13 @@
 package mintychochip.forgehammers.strategies;
 
 import java.util.function.Consumer;
-import mintychochip.forgehammers.container.Hammer;
+import mintychochip.forgehammers.container.HammerLike;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
 public interface HammerStrategy {
 
-    void accept(Location origin, Player player, Hammer hammer, Consumer<Block> blockConsumer);
+    void accept(Player player, BlockFace blockFace, Location origin, HammerLike hammerLike, Consumer<Block> blockConsumer);
 }

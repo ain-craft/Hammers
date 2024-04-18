@@ -19,9 +19,7 @@
 
 package mintychochip.forgehammers.events;
 
-import mintychochip.forgehammers.container.Hammer;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
+import mintychochip.forgehammers.container.HammerLike;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
@@ -29,7 +27,7 @@ import org.bukkit.inventory.ItemStack;
 public interface PrefacingBlockEvent extends Listener, BlockEvent {
 
     ItemStack getItemStack();
-    Hammer getHammer();
+    HammerLike getHammer();
     Player getPlayer();
 
     float getOriginHardness();

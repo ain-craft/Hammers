@@ -24,10 +24,8 @@ import mintychochip.forgehammers.container.ForgeHammers;
 import mintychochip.forgehammers.container.Hammer;
 import mintychochip.forgehammers.events.HammerBreakEvent;
 import mintychochip.forgehammers.events.HammerPreBreakEvent;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
@@ -41,9 +39,8 @@ public final class PreBreakListener extends AbstractListener {
     Material type = event.getBlock().getType();
     return type.getHardness() > event.getHammer().getStrength();
   };
-
-  private final Predicate<HammerPreBreakEvent> blockBlacklisted = event -> event.getHammer()
-      .blockBlacklisted(event.getBlock());
+  private final Predicate<HammerPreBreakEvent> blockIsNotWhitelisted = event -> !event.getHammer()
+      .blockWhitelisted(event.getBlock());
   private final Predicate<HammerPreBreakEvent> blockIsOre = event -> {
     Material type = event.getBlock().getType();
     return Constants.ORE_MATERIALS.contains(type);
@@ -53,8 +50,7 @@ public final class PreBreakListener extends AbstractListener {
     return originHardness < event.getBlock().getType().getHardness();
   };
   private final Predicate<HammerPreBreakEvent> check = blockIsUnbreakable.or(blockTooHard)
-      .or(blockBlacklisted).or(blockIsOre).or(blockIsLowerThanOriginHardness);
-
+      .or(blockIsNotWhitelisted).or(blockIsOre).or(blockIsLowerThanOriginHardness);
   public PreBreakListener(ForgeHammers instance) {
     super(instance);
   }
@@ -78,7 +74,7 @@ public final class PreBreakListener extends AbstractListener {
     if (event.isCancelled()) {
       return;
     }
-    if (check.test(event)) {
+    if (check.test(event) || event.getPlayer().isSneaking()) {
       event.setCancelled(true);
     }
   }

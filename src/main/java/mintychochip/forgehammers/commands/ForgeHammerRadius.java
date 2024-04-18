@@ -21,8 +21,8 @@ package mintychochip.forgehammers.commands;
 
 import mintychochip.forgehammers.Grasper;
 import mintychochip.forgehammers.config.HammerConfig;
-import mintychochip.forgehammers.container.Hammer;
-import mintychochip.forgehammers.container.Hammer.Traditional;
+import mintychochip.forgehammers.container.HammerLike;
+import mintychochip.forgehammers.container.HammerLike.Traditional;
 import mintychochip.genesis.commands.abstraction.GenericCommandObject;
 import mintychochip.genesis.commands.abstraction.SubCommand;
 import org.bukkit.Material;
@@ -52,7 +52,7 @@ public class ForgeHammerRadius extends GenericCommandObject implements SubComman
     if (item.getType() == Material.AIR) {
       return false;
     }
-    Hammer grab = grasper.grab(item);
+    HammerLike grab = grasper.grab(item);
     if (!(grab instanceof Traditional traditional)) {
       return false;
     }
@@ -71,7 +71,7 @@ public class ForgeHammerRadius extends GenericCommandObject implements SubComman
     traditional.setRadius(radius);
     boolean toss = grasper.toss(item, traditional);
     if (toss) {
-      player.sendMessage("Hammer radius was changed successfully: " + oldRadius + " to: "
+      player.sendMessage("HammerLike radius was changed successfully: " + oldRadius + " to: "
           + radius); //move to config
     } else {
       player.sendMessage("Failed: " + oldRadius);

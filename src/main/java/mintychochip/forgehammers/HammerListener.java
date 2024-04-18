@@ -20,11 +20,10 @@
 package mintychochip.forgehammers;
 
 import mintychochip.forgehammers.container.ForgeHammers;
-import mintychochip.forgehammers.container.Hammer;
+import mintychochip.forgehammers.container.HammerLike;
 import mintychochip.forgehammers.events.HammerPreBreakEvent;
 import mintychochip.forgehammers.strategies.StrategySelector;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -54,16 +53,15 @@ public class HammerListener extends AbstractListener implements StrategySelector
     if (itemInUse.getType() == Material.AIR) {
       return;
     }
-    Hammer grab = grasper.grab(itemInUse);
+    HammerLike grab = grasper.grab(itemInUse);
     if (grab == null) {
       return;
     }
     final Block origin = event.getBlock();
     final float originHardness = origin.getType().getHardness();
-    this.selectStrategy(grab).accept(origin.getLocation(), player, grab, block -> {
+    this.selectStrategy(grab).accept(event.getPlayer(),event.getPlayer().getTargetBlockFace(7),origin.getLocation(), grab, block -> {
       Bukkit.getPluginManager().callEvent(new HammerPreBreakEvent(block,player, grab, itemInUse,
           originHardness));
     });
   }
-
 }

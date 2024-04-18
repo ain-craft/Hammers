@@ -19,11 +19,13 @@
 
 package mintychochip.forgehammers.commands;
 
+import java.util.ArrayList;
+import mintychochip.forgehammers.Constants;
 import mintychochip.forgehammers.Grasper;
 import mintychochip.forgehammers.config.HammerConfig;
 import mintychochip.forgehammers.container.ForgeHammers;
-import mintychochip.forgehammers.container.Hammer;
-import mintychochip.forgehammers.container.ToolMaterial;
+import mintychochip.forgehammers.container.HammerLike.Traditional;
+import mintychochip.forgehammers.container.ToolMaterialTypeConverter;
 import mintychochip.genesis.commands.abstraction.GenericCommandObject;
 import mintychochip.genesis.commands.abstraction.SubCommand;
 import mintychochip.genesis.config.abstraction.GenesisConfigurationSection;
@@ -32,7 +34,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class ForgeHammerCreation extends GenericCommandObject implements SubCommand {
+public class ForgeHammerCreation extends GenericCommandObject implements SubCommand,
+    ToolMaterialTypeConverter {
 
   private final HammerConfig config;
 
@@ -59,7 +62,10 @@ public class ForgeHammerCreation extends GenericCommandObject implements SubComm
         ForgeHammers.getInstance(),
         Material.DIAMOND_PICKAXE, hammer, false).defaultBuild();
     ItemStack itemStack = abstractItem.getItemStack();
-    grasper.toss(itemStack, Hammer.Traditional.create(2, ToolMaterial.DIAMOND.getHardness(), hammer.getStringList("black-list")));
+    Traditional traditional = Traditional.create(2, new ArrayList<>());
+    traditional.setStrength(this.getToolMaterial(itemStack).getStrength());
+    traditional.addMaterialsToWhitelist(Constants.INSTANCE.PICKAXE);
+    grasper.toss(itemStack, traditional);
     player.getInventory().addItem(itemStack);
     return true;
   }

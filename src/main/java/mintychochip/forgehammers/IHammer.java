@@ -19,11 +19,15 @@
 
 package mintychochip.forgehammers;
 
+import java.util.Set;
 import org.bukkit.Material;
 
 public interface IHammer {
     void setDeserializationType(String deserializationType);
     String getDeserializationType();
-    boolean materialBlacklisted(Material material);
+    boolean materialWhitelisted(Material material);
     float getStrength();
+    void setStrength(float strength);
+    void addToWhitelist(Material material);
+    void addMaterialsToWhitelist(Set<Material> materials);
 }

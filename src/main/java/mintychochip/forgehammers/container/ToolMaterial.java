@@ -20,11 +20,12 @@
 package mintychochip.forgehammers.container;
 
 public enum ToolMaterial {
-  WOODEN (5),
-  IRON (5),
-  GOLD (5),
-  DIAMOND (50),
-  NETHERITE (50);
+  WOODEN(5),
+  IRON(5),
+  STONE(5),
+  GOLD(5),
+  DIAMOND(50),
+  NETHERITE(50);
 
   private final float hardness;
 
@@ -32,7 +33,7 @@ public enum ToolMaterial {
     this.hardness = hardness;
   }
 
-  public float getHardness() {
+  public float getStrength() {
     return hardness;
   }
 }

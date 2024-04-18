@@ -19,18 +19,14 @@
 
 package mintychochip.forgehammers.strategies;
 
-import mintychochip.forgehammers.container.Hammer;
-import mintychochip.forgehammers.container.Hammer.Patterned;
-import mintychochip.forgehammers.container.Hammer.Traditional;
+import mintychochip.forgehammers.container.HammerLike;
+import mintychochip.forgehammers.container.HammerLike.Traditional;
 
 public interface StrategySelector {
 
-  default HammerStrategy selectStrategy(Hammer hammer) {
-    if (hammer instanceof Traditional) {
+  default HammerStrategy selectStrategy(HammerLike hammerLike) {
+    if (hammerLike instanceof Traditional) {
       return TraditionalHammerStrategy.INSTANCE;
-    }
-    if (hammer instanceof Patterned) {
-      return PatternedHammerStrategy.INSTANCE;
     }
     return null;
   }

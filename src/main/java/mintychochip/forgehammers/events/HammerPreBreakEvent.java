@@ -19,59 +19,59 @@
 
 package mintychochip.forgehammers.events;
 
-import mintychochip.forgehammers.container.Hammer;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import mintychochip.forgehammers.container.HammerLike;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.inventory.ItemStack;
 
-public final class HammerPreBreakEvent extends ForgeBreakBaseEvent implements PrefacingBlockEvent, Cancellable {
+public final class HammerPreBreakEvent extends ForgeBreakBaseEvent implements PrefacingBlockEvent,
+    Cancellable {
 
-    private final Hammer hammer;
+  private final HammerLike hammerLike;
 
-    private boolean cancelled = false;
+  private boolean cancelled = false;
 
-    private final ItemStack itemStack;
-    private final float originHardness;
-    private final Block block;
-    public HammerPreBreakEvent(Block block,Player player, Hammer hammer, ItemStack itemStack, float originHardness) {
-        super(player);
-        this.block = block;
-        this.hammer = hammer;
-        this.itemStack = itemStack;
-        this.originHardness = originHardness;
-    }
+  private final ItemStack itemStack;
+  private final float originHardness;
+  private final Block block;
 
-    @Override
-    public float getOriginHardness() {
-        return originHardness;
-    }
+  public HammerPreBreakEvent(Block block, Player player, HammerLike hammerLike, ItemStack itemStack,
+      float originHardness) {
+    super(player);
+    this.block = block;
+    this.hammerLike = hammerLike;
+    this.itemStack = itemStack;
+    this.originHardness = originHardness;
+  }
 
-    @Override
-    public ItemStack getItemStack() {
-        return itemStack;
-    }
+  @Override
+  public float getOriginHardness() {
+    return originHardness;
+  }
 
-    @Override
-    public Hammer getHammer() {
-        return hammer;
-    }
+  @Override
+  public ItemStack getItemStack() {
+    return itemStack;
+  }
 
-    @Override
-    public boolean isCancelled() {
-        return cancelled;
-    }
+  @Override
+  public HammerLike getHammer() {
+    return hammerLike;
+  }
 
-    @Override
-    public void setCancelled(boolean b) {
-        this.cancelled = b;
-    }
+  @Override
+  public boolean isCancelled() {
+    return cancelled;
+  }
 
-    @Override
-    public Block getBlock() {
-        return block;
-    }
+  @Override
+  public void setCancelled(boolean b) {
+    this.cancelled = b;
+  }
+
+  @Override
+  public Block getBlock() {
+    return block;
+  }
 }

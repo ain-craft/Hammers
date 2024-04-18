@@ -47,10 +47,10 @@ public final class ForgeHammers extends JavaPlugin {
   public void onEnable() {
     // Plugin startup logic
     instance = this;
-    RuntimeTypeAdapterFactory<Hammer> hammerFactory = RuntimeTypeAdapterFactory.of(Hammer.class,
+    RuntimeTypeAdapterFactory<HammerLike> hammerFactory = RuntimeTypeAdapterFactory.of(HammerLike.class,
             Constants.DESERIALIZATION_TYPE)
-        .registerSubtype(Hammer.Traditional.class, "traditional")
-        .registerSubtype(Hammer.Patterned.class, "patterned");
+        .registerSubtype(HammerLike.Traditional.class, "traditional")
+        .registerSubtype(HammerLike.Patterned.class, "patterned");
     NamespacedKey hammerKey = new NamespacedKey(this, "hammer");
     GrasperImpl grasper = new GrasperImpl(hammerFactory, hammerKey);
     List<Listener> listeners = Arrays.asList(new BreakListener(this), new PreBreakListener(this),
