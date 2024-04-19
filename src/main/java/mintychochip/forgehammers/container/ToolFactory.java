@@ -19,6 +19,15 @@
 
 package mintychochip.forgehammers.container;
 
-public class Hammer extends Tool {
+public class ToolFactory {
 
+  public static HammerLike createHammer(HammerType type, Tool whitelist) {
+    if(!(whitelist == Tool.SHOVEL || whitelist == Tool.HAMMER)) {
+      return null;
+    }
+    if(type == HammerType.TRADITIONAL) {
+      return HammerLike.Traditional.create(type,whitelist);
+    }
+    return HammerLike.Patterned.create(type,whitelist);
+  }
 }

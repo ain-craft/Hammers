@@ -19,6 +19,7 @@
 
 package mintychochip.forgehammers.events;
 
+import mintychochip.forgehammers.strategies.TraditionalHammerStrategy.Cardinal;
 import mintychochip.genesis.events.AbstractEvent;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -38,10 +39,16 @@ public abstract class ForgeBreakBaseEvent extends AbstractEvent {
 
     protected Block block;
 
-    protected ForgeBreakBaseEvent(Player player) {
-        this.player = player;
+    protected final Cardinal cardinal;
+
+    public Cardinal getCardinal() {
+        return cardinal;
     }
 
+    protected ForgeBreakBaseEvent(Cardinal cardinal, Player player) {
+        this.cardinal = cardinal;
+        this.player = player;
+    }
     public Player getPlayer() {
         return player;
     }

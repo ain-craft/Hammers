@@ -38,25 +38,5 @@ public class Constants {
   public static final List<Material> ORE_MATERIALS = Arrays.stream(Material.values()).filter(
           material -> material.toString().contains("_ORE"))
       .toList();
-  public final Set<Material> PICKAXE;
-  public final Set<Material> SHOVEL = null;
-  private Constants() {
-    PICKAXE = this.getMaterialsFromStringList(
-        List.of("STONE", "DEEPSLATE", "GRANITE", "ANDESITE", "DIORITE", "TUFF", "CALCITE",
-            "NETHERRACK", "NYLIUM", "TERRACOTTA", "GLASS", "ICE", "BRICK", "PRISMARINE", "BASALT",
-            "PURPUR", "MAGMA", "CORAL", "COPPER", "IRON", "GOLD", "DIAMOND", "EMERALD", "NETHERITE",
-            "AMETHYST","CONCRETE", "OBSIDIAN"));
-    PICKAXE.removeAll(this.getMaterialsFromStringList(List.of("CONCRETE_POWDER")));
-  }
-  private Set<Material> getMaterialsFromStringList(List<String> filters) {
-    Set<Material> materials = new HashSet<>();
-    for (String filter : filters) {
-      for (Material material : Material.values()) {
-        if (material.name().contains(filter) && material.isBlock()) {
-          materials.add(material);
-        }
-      }
-    }
-    return materials;
-  }
+
 }

@@ -21,11 +21,15 @@ package mintychochip.forgehammers;
 
 import mintychochip.forgehammers.container.ForgeHammers;
 import mintychochip.forgehammers.container.HammerLike;
+import mintychochip.forgehammers.events.DropBlockItemEvent;
 import mintychochip.forgehammers.events.HammerPreBreakEvent;
+import mintychochip.forgehammers.strategies.HammerStrategy;
 import mintychochip.forgehammers.strategies.StrategySelector;
+import mintychochip.forgehammers.strategies.TraditionalHammerStrategy.Cardinal;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -57,11 +61,30 @@ public class HammerListener extends AbstractListener implements StrategySelector
     if (grab == null) {
       return;
     }
+    BlockFace targetBlockFace = player.getTargetBlockFace(7);
+    if(targetBlockFace == null) {
+      return;
+    }
+    event.setDropItems(false);
     final Block origin = event.getBlock();
+    Cardinal cardinal = this.getCardinalFromBlockFace(targetBlockFace);
+
+    Bukkit.getPluginManager().callEvent(new DropBlockItemEvent(cardinal,origin.getLocation(),origin.getDrops(itemInUse),grab,itemInUse));
     final float originHardness = origin.getType().getHardness();
-    this.selectStrategy(grab).accept(event.getPlayer(),event.getPlayer().getTargetBlockFace(7),origin.getLocation(), grab, block -> {
-      Bukkit.getPluginManager().callEvent(new HammerPreBreakEvent(block,player, grab, itemInUse,
-          originHardness));
-    });
+    this.selectStrategy(grab)
+        .accept(cardinal, event.getPlayer().getTargetBlockFace(7), origin.getLocation(),
+            grab, (block) -> {
+              Bukkit.getPluginManager()
+                  .callEvent(new HammerPreBreakEvent(cardinal, block, player, grab, itemInUse,
+                      originHardness));
+            });
+  }
+  private Cardinal getCardinalFromBlockFace(BlockFace blockFace) {
+    return switch (blockFace) {
+      case UP, DOWN -> Cardinal.UP_DOWN;
+      case EAST, WEST -> Cardinal.EAST_WEST;
+      case NORTH, SOUTH -> Cardinal.NORTH_SOUTH;
+      default -> null;
+    };
   }
 }

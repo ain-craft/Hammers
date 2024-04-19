@@ -21,7 +21,7 @@ package mintychochip.forgehammers;
 
 import java.util.function.Predicate;
 import mintychochip.forgehammers.container.ForgeHammers;
-import mintychochip.forgehammers.container.Hammer;
+import mintychochip.forgehammers.events.DropBlockItemEvent;
 import mintychochip.forgehammers.events.HammerBreakEvent;
 import mintychochip.forgehammers.events.HammerPreBreakEvent;
 import org.bukkit.Bukkit;
@@ -31,6 +31,7 @@ import org.bukkit.event.EventPriority;
 
 public final class PreBreakListener extends AbstractListener {
 
+  private static final int RANGE_ADJUSTMENT = 5;
   private final Predicate<HammerPreBreakEvent> blockIsUnbreakable = event -> {
     Material type = event.getBlock().getType();
     return type == Material.BEDROCK;
@@ -43,14 +44,15 @@ public final class PreBreakListener extends AbstractListener {
       .blockWhitelisted(event.getBlock());
   private final Predicate<HammerPreBreakEvent> blockIsOre = event -> {
     Material type = event.getBlock().getType();
-    return Constants.ORE_MATERIALS.contains(type);
+    return Constants.ORE_MATERIALS.contains(type) && event.getHammer().getPerks().isOrePrevention() && !event.getPlayer().isSneaking();
   };
   private final Predicate<HammerPreBreakEvent> blockIsLowerThanOriginHardness = event -> {
     float originHardness = event.getOriginHardness();
-    return originHardness < event.getBlock().getType().getHardness();
+    return originHardness + RANGE_ADJUSTMENT < event.getBlock().getType().getHardness();
   };
   private final Predicate<HammerPreBreakEvent> check = blockIsUnbreakable.or(blockTooHard)
-      .or(blockIsNotWhitelisted).or(blockIsOre).or(blockIsLowerThanOriginHardness);
+      .or(blockIsNotWhitelisted).or(blockIsLowerThanOriginHardness);
+
   public PreBreakListener(ForgeHammers instance) {
     super(instance);
   }
@@ -66,7 +68,21 @@ public final class PreBreakListener extends AbstractListener {
       return;
     }
     Bukkit.getPluginManager()
-        .callEvent(new HammerBreakEvent(event.getPlayer(), event.getItemStack(), event.getBlock()));
+        .callEvent(new HammerBreakEvent(event.getCardinal(),event.getPlayer(), event.getItemStack(), event.getBlock(), drops -> {
+          if(drops != null) {
+            Bukkit.getPluginManager().callEvent(new DropBlockItemEvent(event.getCardinal(),event.getBlock().getLocation(),drops,event.getHammer(),event.getItemStack()));
+          }
+        }));
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST)
+  private void checkPerks(final HammerPreBreakEvent event) {
+    if (event.isCancelled()) {
+      return;
+    }
+    if (blockIsOre.test(event)) {
+      event.setCancelled(true);
+    }
   }
 
   @EventHandler(priority = EventPriority.HIGH)
@@ -74,7 +90,7 @@ public final class PreBreakListener extends AbstractListener {
     if (event.isCancelled()) {
       return;
     }
-    if (check.test(event) || event.getPlayer().isSneaking()) {
+    if (check.test(event)) {
       event.setCancelled(true);
     }
   }

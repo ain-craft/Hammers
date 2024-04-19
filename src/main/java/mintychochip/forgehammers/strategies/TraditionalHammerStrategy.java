@@ -19,6 +19,7 @@
 
 package mintychochip.forgehammers.strategies;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import mintychochip.forgehammers.container.HammerLike;
 import org.bukkit.Location;
@@ -35,12 +36,12 @@ public final class TraditionalHammerStrategy implements HammerStrategy {
 
   }
 
-  enum Cardinal {
+  public enum Cardinal {
     UP_DOWN, EAST_WEST, NORTH_SOUTH
   }
 
   @Override
-  public void accept(Player player, BlockFace blockFace, Location origin, HammerLike hammerLike,
+  public void accept(Cardinal cardinal, BlockFace blockFace, Location origin, HammerLike hammerLike,
       Consumer<Block> blockConsumer) {
     if (!(hammerLike instanceof HammerLike.Traditional traditional)) {
       return;
@@ -48,24 +49,15 @@ public final class TraditionalHammerStrategy implements HammerStrategy {
     final int radius = traditional.getRadius();
     for (int offset = -radius; offset <= radius; offset++) {
       for (int j = -radius; j <= radius; j++) {
-        final Vector v = switch (this.getCardinalFromBlockFace(blockFace)) {
+        final Vector v = switch (cardinal) {
           case UP_DOWN -> new Vector(offset, 0, j);
           case EAST_WEST -> new Vector(0, offset, j);
           case NORTH_SOUTH -> new Vector(offset, j, 0);
         };
-        final Location add = origin.clone().add(v);
-        if (!add.equals(origin)) {
-          blockConsumer.accept(add.getBlock());
+        if(!v.equals(new Vector(0,0,0))) {
+          blockConsumer.accept(origin.clone().add(v).getBlock());
         }
       }
     }
-  }
-  private Cardinal getCardinalFromBlockFace(BlockFace blockFace) {
-    return switch (blockFace) {
-      case UP, DOWN -> Cardinal.UP_DOWN;
-      case EAST, WEST -> Cardinal.EAST_WEST;
-      case NORTH, SOUTH -> Cardinal.NORTH_SOUTH;
-      default -> null;
-    };
   }
 }

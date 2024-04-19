@@ -19,6 +19,10 @@
 
 package mintychochip.forgehammers.events;
 
+import java.util.Collection;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import mintychochip.forgehammers.strategies.TraditionalHammerStrategy.Cardinal;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -29,19 +33,25 @@ public final class HammerBreakEvent extends ForgeBreakBaseEvent implements Postf
 
   private final ItemStack itemStack;
 
-  public HammerBreakEvent(Player player, ItemStack itemStack) {
-    super(player);
-    this.itemStack = itemStack;
-  }
-  public HammerBreakEvent(Player player, ItemStack itemStack, Block block) {
-    super(player);
+  private final Consumer<Collection<ItemStack>> successful;
+
+  public HammerBreakEvent(Cardinal cardinal, Player player, ItemStack itemStack, Block block,
+      Consumer<Collection<ItemStack>> successful) {
+    super(cardinal, player);
     this.itemStack = itemStack;
     this.block = block;
+    this.successful = successful;
   }
+
+  public void accept(Collection<ItemStack> drops) {
+    this.successful.accept(drops);
+  }
+
   @Override
   public Block getBlock() {
     return block;
   }
+
   @Override
   public ItemStack getItemStack() {
     return itemStack;

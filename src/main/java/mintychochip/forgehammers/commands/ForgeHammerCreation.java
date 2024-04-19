@@ -19,13 +19,15 @@
 
 package mintychochip.forgehammers.commands;
 
-import java.util.ArrayList;
-import mintychochip.forgehammers.Constants;
 import mintychochip.forgehammers.Grasper;
 import mintychochip.forgehammers.config.HammerConfig;
 import mintychochip.forgehammers.container.ForgeHammers;
+import mintychochip.forgehammers.container.HammerLike;
 import mintychochip.forgehammers.container.HammerLike.Traditional;
+import mintychochip.forgehammers.container.HammerType;
+import mintychochip.forgehammers.container.ToolFactory;
 import mintychochip.forgehammers.container.ToolMaterialTypeConverter;
+import mintychochip.forgehammers.container.Tool;
 import mintychochip.genesis.commands.abstraction.GenericCommandObject;
 import mintychochip.genesis.commands.abstraction.SubCommand;
 import mintychochip.genesis.config.abstraction.GenesisConfigurationSection;
@@ -62,10 +64,12 @@ public class ForgeHammerCreation extends GenericCommandObject implements SubComm
         ForgeHammers.getInstance(),
         Material.DIAMOND_PICKAXE, hammer, false).defaultBuild();
     ItemStack itemStack = abstractItem.getItemStack();
-    Traditional traditional = Traditional.create(2, new ArrayList<>());
-    traditional.setStrength(this.getToolMaterial(itemStack).getStrength());
-    traditional.addMaterialsToWhitelist(Constants.INSTANCE.PICKAXE);
-    grasper.toss(itemStack, traditional);
+    HammerLike hammerLike = ToolFactory.createHammer(HammerType.TRADITIONAL, Tool.HAMMER);
+    hammerLike.setStrength(this.getToolMaterial(itemStack).getStrength());
+    if(hammerLike instanceof Traditional traditional) {
+      traditional.setRadius(1);
+    }
+    grasper.toss(itemStack, hammerLike);
     player.getInventory().addItem(itemStack);
     return true;
   }

@@ -19,60 +19,53 @@
 
 package mintychochip.forgehammers.events;
 
+import java.util.Collection;
 import mintychochip.forgehammers.container.HammerLike;
 import mintychochip.forgehammers.strategies.TraditionalHammerStrategy.Cardinal;
+import mintychochip.genesis.events.AbstractEvent;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 import org.bukkit.inventory.ItemStack;
 
-public final class HammerPreBreakEvent extends ForgeBreakBaseEvent implements PrefacingBlockEvent,
-    Cancellable {
+public class DropBlockItemEvent extends AbstractEvent  {
+
+  private final Location dropLocation;
+
+  private final Cardinal cardinal;
+  private Collection<ItemStack> drops;
 
   private final HammerLike hammerLike;
 
-  private boolean cancelled = false;
-
   private final ItemStack itemStack;
-  private final float originHardness;
-  private final Block block;
-
-  public HammerPreBreakEvent(Cardinal cardinal, Block block, Player player, HammerLike hammerLike, ItemStack itemStack,
-      float originHardness) {
-    super(cardinal, player);
-    this.block = block;
+  public DropBlockItemEvent(Cardinal cardinal, Location dropLocation, Collection<ItemStack> drops, HammerLike hammerLike, ItemStack itemStack) {
+    this.dropLocation = dropLocation;
+    this.drops = drops;
     this.hammerLike = hammerLike;
     this.itemStack = itemStack;
-    this.originHardness = originHardness;
+    this.cardinal = cardinal;
   }
 
-  @Override
-  public float getOriginHardness() {
-    return originHardness;
+  public void setDrops(Collection<ItemStack> drops) {
+    this.drops = drops;
   }
 
-  @Override
-  public ItemStack getItemStack() {
-    return itemStack;
+  public Cardinal getCardinal() {
+    return cardinal;
   }
 
-  @Override
-  public HammerLike getHammer() {
+  public HammerLike getHammerLike() {
     return hammerLike;
   }
 
-  @Override
-  public boolean isCancelled() {
-    return cancelled;
+  public Collection<ItemStack> getDrops() {
+    return drops;
   }
 
-  @Override
-  public void setCancelled(boolean b) {
-    this.cancelled = b;
+  public Location getDropLocation() {
+    return dropLocation;
   }
 
-  @Override
-  public Block getBlock() {
-    return block;
+  public ItemStack getItemStack() {
+    return itemStack;
   }
 }

@@ -20,7 +20,6 @@
 package mintychochip.forgehammers.container;
 
 import com.google.gson.annotations.SerializedName;
-import java.util.List;
 import java.util.Set;
 import mintychochip.forgehammers.Constants;
 import mintychochip.forgehammers.IHammer;
@@ -35,14 +34,32 @@ public abstract class HammerLike implements IHammer, Embeddable {
   protected String deserializationType;
 
   @SerializedName("whitelist")
-  protected final List<String> whitelist;
-
+  protected final Set<Material> whitelist;
+  @SerializedName("perks")
+  protected final HammerPerks perks = new HammerPerks();
   @SerializedName("strength")
   protected float strength;
 
-  private HammerLike(String deserializationType, List<String> whitelist) {
+  public Set<Material> getWhitelist() {
+    return whitelist;
+  }
+
+  private HammerLike(String deserializationType, Set<Material> whitelist) {
     this.deserializationType = deserializationType;
     this.whitelist = whitelist;
+  }
+
+  public void setStrength(float strength) {
+    this.strength = strength;
+  }
+
+  public HammerPerks getPerks() {
+    return perks;
+  }
+
+  @Override
+  public boolean materialWhitelisted(Material material) {
+    return whitelist.stream().anyMatch(entry -> entry == material);
   }
 
   public boolean blockWhitelisted(Block block) {
@@ -50,28 +67,17 @@ public abstract class HammerLike implements IHammer, Embeddable {
   }
 
   @Override
-  public boolean materialWhitelisted(Material material) {
-    return whitelist.stream().anyMatch(entry -> entry.equalsIgnoreCase(material.toString()));
-  }
-
-  @Override
   public NamespacedKey getKey() {
     return Constants.HAMMER_KEY;
+  }
+
+  public float getStrength() {
+    return strength;
   }
 
   @Override
   public String getSimpleKey() {
     return "hammer";
-  }
-
-  @Override
-  public void setStrength(float strength) {
-    this.strength = strength;
-  }
-
-  @Override
-  public float getStrength() {
-    return strength;
   }
 
   @Override
@@ -83,36 +89,19 @@ public abstract class HammerLike implements IHammer, Embeddable {
   public void setDeserializationType(String deserializationType) {
     this.deserializationType = deserializationType;
   }
-  @Override
-  public void addToWhitelist(Material material) {
-    if(whitelist != null) {
-      whitelist.add(material.toString());
-    }
-  }
-  @Override
-  public void addMaterialsToWhitelist(Set<Material> materials) {
-    if(whitelist != null) {
-      materials.forEach(this::addToWhitelist);
-    }
-  }
+
   public final static class Traditional extends HammerLike {
 
     @SerializedName("radius")
     private int radius;
 
-    private Traditional(int radius, String deserializationType,
-        List<String> whitelist) {
+    private Traditional(String deserializationType,
+        Set<Material> whitelist) {
       super(deserializationType, whitelist);
-      this.radius = radius;
     }
 
-    public static Traditional create(int radius,
-        List<String> whitelist) {
-      if (radius < 0) {
-        radius = 1;
-      }
-      return new Traditional(radius, HammerType.TRADITIONAL.getDeserializationType(),
-          whitelist);
+    public static Traditional create(HammerType type, Tool whitelist) {
+      return new Traditional(type.getDeserializationType(), whitelist.getWhitelist());
     }
 
     public int getRadius() {
@@ -127,11 +116,14 @@ public abstract class HammerLike implements IHammer, Embeddable {
   public static final class Patterned extends HammerLike {
 
     @SerializedName("pattern")
-    private final String[][] pattern;
+    private String[][] pattern;
 
-    private Patterned(String[][] pattern, String deserializationType,
-        List<String> whitelist) {
+    private Patterned(String deserializationType,
+        Set<Material> whitelist) {
       super(deserializationType, whitelist);
+    }
+
+    public void setPattern(String[][] pattern) {
       this.pattern = pattern;
     }
 
@@ -139,12 +131,8 @@ public abstract class HammerLike implements IHammer, Embeddable {
       return pattern;
     }
 
-    public static Patterned create(String[][] pattern, List<String> whitelist) {
-      if (pattern == null) {
-        return null;
-      }
-      return new HammerLike.Patterned(pattern, HammerType.PATTERNED.getDeserializationType(),
-          whitelist);
+    public static Patterned create(HammerType type, Tool whitelist) {
+      return new Patterned(type.getDeserializationType(), whitelist.getWhitelist());
     }
   }
 }

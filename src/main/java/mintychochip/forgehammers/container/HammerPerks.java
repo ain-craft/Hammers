@@ -17,13 +17,28 @@
  *
  */
 
-package mintychochip.forgehammers;
+package mintychochip.forgehammers.container;
 
-import java.util.Set;
-import org.bukkit.Material;
+public class HammerPerks {
 
-public interface IHammer {
-    void setDeserializationType(String deserializationType);
-    String getDeserializationType();
-    boolean materialWhitelisted(Material material);
+  private boolean orePrevention = true;
+  private boolean autoSmelt = true;
+
+  private boolean magnetic = false;
+
+  public boolean isAutoSmelt() {
+    return autoSmelt;
+  }
+
+  public void setAutoSmelt(boolean autoSmelt) {
+    this.autoSmelt = autoSmelt;
+  }
+
+  public boolean isOrePrevention() {
+    return orePrevention;
+  }
+
+  public void setOrePrevention(boolean orePrevention) {
+    this.orePrevention = orePrevention;
+  }
 }

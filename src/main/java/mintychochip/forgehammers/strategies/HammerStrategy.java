@@ -19,8 +19,10 @@
 
 package mintychochip.forgehammers.strategies;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import mintychochip.forgehammers.container.HammerLike;
+import mintychochip.forgehammers.strategies.TraditionalHammerStrategy.Cardinal;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -28,5 +30,6 @@ import org.bukkit.entity.Player;
 
 public interface HammerStrategy {
 
-    void accept(Player player, BlockFace blockFace, Location origin, HammerLike hammerLike, Consumer<Block> blockConsumer);
+    void accept(Cardinal cardinal, BlockFace blockFace, Location origin, HammerLike hammerLike,
+        Consumer<Block> blockConsumer);
 }
