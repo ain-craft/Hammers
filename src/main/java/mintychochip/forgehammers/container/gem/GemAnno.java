@@ -17,19 +17,21 @@
  *
  */
 
-package mintychochip.forgehammers.container;
+package mintychochip.forgehammers.container.gem;
 
-public class ToolModifiers {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-    private boolean orePrevention;
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface GemAnno {
 
-    private boolean singleBlock;
-
-    public boolean isOrePrevention() {
-        return orePrevention;
-    }
-
-    public boolean isSingleBlock() {
-        return singleBlock;
-    }
+  enum ExecutionPriority {
+    LOW,
+    HIGH,
+    HIGHEST;
+  }
+  ExecutionPriority priority();
 }

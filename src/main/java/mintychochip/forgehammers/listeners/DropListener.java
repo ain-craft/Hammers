@@ -19,75 +19,43 @@
 
 package mintychochip.forgehammers.listeners;
 
-import java.util.Collection;
 import java.util.function.Predicate;
 import mintychochip.forgehammers.AbstractListener;
 import mintychochip.forgehammers.container.ForgeHammers;
 import mintychochip.forgehammers.container.HammerLike;
-import mintychochip.forgehammers.events.DropBlockItemEvent;
+import mintychochip.forgehammers.container.ToolPerks.Perk;
+import mintychochip.forgehammers.container.gem.GemContainer;
+import mintychochip.forgehammers.container.gem.GemEnum;
+import mintychochip.forgehammers.container.gem.GemGrasper;
+import mintychochip.forgehammers.events.DropEvent;
 import mintychochip.forgehammers.events.PreBlockDropEvent;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
 
 public class DropListener extends AbstractListener {
 
-  private final Predicate<PreBlockDropEvent> gamemode = event -> event.getPlayer().getGameMode() != GameMode.SURVIVAL;
-  private final Predicate<PreBlockDropEvent> check = gamemode;
   public DropListener(ForgeHammers instance) {
     super(instance);
   }
-  @EventHandler(priority = EventPriority.MONITOR)
-  private void onDropItemEvent(final DropBlockItemEvent event) {
+
+  @EventHandler
+  private void onDropItemEvent(final DropEvent event) {
     Location dropLocation = event.getDropLocation();
     event.getDrops().forEach(drop -> dropLocation.getWorld().dropItemNaturally(dropLocation, drop));
   }
-  @EventHandler (priority = EventPriority.MONITOR)
-  private void initializeBlockDrops(final PreBlockDropEvent event) {
-    if(event.isCancelled()) {
+
+  @EventHandler(priority = EventPriority.MONITOR)
+  private void initializeBlockDropEvent(final PreBlockDropEvent event) {
+    if (event.isCancelled()) {
       return;
     }
-    Bukkit.getPluginManager().callEvent(new DropBlockItemEvent(event.getDropLocation(),event.getDrops()));
-  }
-  @EventHandler(priority = EventPriority.HIGH)
-  private void checkPredicate(final PreBlockDropEvent event) {
-    if(event.isCancelled()) {
-      return;
-    }
-    if(check.test(event)) {
-      event.setCancelled(true);
-    }
-  }
-  @EventHandler (priority = EventPriority.HIGH)
-  private void adjustIfAutoSmelt(final PreBlockDropEvent event) {
-    if(event.isCancelled()) {
-      return;
-    }
-    HammerLike hammerLike = event.getHammerLike();
-    if(hammerLike.getPerks().isAutoSmelt()) {
-      event.setDrops(event.getDrops().stream().map(drop -> new ItemStack(this.getSmeltedItemType(drop.getType()),drop.getAmount())).toList());
-    }
-  }
-  private Material getSmeltedItemType(Material material) {
-    return switch (material) {
-      case IRON_ORE, RAW_IRON, DEEPSLATE_IRON_ORE -> Material.IRON_INGOT;
-      case GOLD_ORE, RAW_GOLD, DEEPSLATE_GOLD_ORE -> Material.GOLD_INGOT;
-      case COPPER_ORE, RAW_COPPER, DEEPSLATE_COPPER_ORE -> Material.COPPER_INGOT;
-      case NETHER_GOLD_ORE -> Material.GOLD_NUGGET;
-      case ANCIENT_DEBRIS -> Material.NETHERITE_SCRAP;
-      case SAND -> Material.GLASS;
-      case COBBLESTONE -> Material.STONE;
-      case NETHERRACK -> Material.NETHER_BRICK;
-      case CLAY -> Material.TERRACOTTA;
-      case DEEPSLATE_EMERALD_ORE -> Material.EMERALD;
-      case DEEPSLATE_LAPIS_ORE -> Material.LAPIS_LAZULI;
-      case DEEPSLATE_DIAMOND_ORE -> Material.DIAMOND;
-      case DEEPSLATE_REDSTONE_ORE -> Material.REDSTONE;
-      default -> material;
-    };
+    Bukkit.getPluginManager().callEvent(new DropEvent(event.getBlockLocation(), event.getDrops()));
   }
 }

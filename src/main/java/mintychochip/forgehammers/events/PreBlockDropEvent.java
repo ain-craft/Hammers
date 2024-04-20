@@ -21,6 +21,7 @@ package mintychochip.forgehammers.events;
 
 import java.util.Collection;
 import mintychochip.forgehammers.container.HammerLike;
+import mintychochip.forgehammers.container.gem.GemContainer;
 import mintychochip.genesis.events.AbstractEvent;
 import org.bukkit.Location;
 import org.bukkit.event.Cancellable;
@@ -32,24 +33,28 @@ public class PreBlockDropEvent extends AbstractEvent implements Cancellable {
   private boolean cancelled = false;
   private final Location dropLocation;
   private Collection<ItemStack> drops;
-
   private final HammerLike hammerLike;
+
+  private final GemContainer gemContainer;
   private final Player player;
-
-
   public PreBlockDropEvent(Location dropLocation, Collection<ItemStack> drops,
-      HammerLike hammerLike, Player player) {
+      HammerLike hammerLike,GemContainer gemContainer, Player player) {
     this.dropLocation = dropLocation;
     this.drops = drops;
     this.hammerLike = hammerLike;
+    this.gemContainer = gemContainer;
     this.player = player;
+  }
+
+  public GemContainer getGemContainer() {
+    return gemContainer;
   }
 
   public Player getPlayer() {
     return player;
   }
 
-  public Location getDropLocation() {
+  public Location getBlockLocation() {
     return dropLocation;
   }
 

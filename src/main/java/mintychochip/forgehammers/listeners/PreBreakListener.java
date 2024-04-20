@@ -22,11 +22,9 @@ package mintychochip.forgehammers.listeners;
 import java.util.function.Predicate;
 import mintychochip.forgehammers.AbstractListener;
 import mintychochip.forgehammers.container.ForgeHammers;
-import mintychochip.forgehammers.events.DropBlockItemEvent;
 import mintychochip.forgehammers.events.HammerBreakEvent;
 import mintychochip.forgehammers.events.HammerPreBreakEvent;
 import mintychochip.forgehammers.events.PreBlockDropEvent;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -68,9 +66,8 @@ public final class PreBreakListener extends AbstractListener {
     }
     Bukkit.getPluginManager()
         .callEvent(new HammerBreakEvent(event.getCardinal(), event.getBlock(), event.getPlayer(),
-            event.getItemStack(), drops -> {
-          Bukkit.getPluginManager().callEvent(new PreBlockDropEvent(event.getBlock().getLocation(),drops,event.getHammer(),event.getPlayer()));
-        }));
+            event.getItemStack(), event::accept
+        ));
   }
 
   @EventHandler(priority = EventPriority.HIGH)

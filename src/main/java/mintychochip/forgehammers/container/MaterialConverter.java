@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
@@ -49,8 +51,7 @@ public interface MaterialConverter {
   }
 
   private int additionalDrops(int level) {
-    int maxRange = level + 2;
-    return new Random().nextInt(maxRange);
+    return new Random().nextInt(level);
   }
 
   private Material getMaterial(ItemStack itemStack, Block block,

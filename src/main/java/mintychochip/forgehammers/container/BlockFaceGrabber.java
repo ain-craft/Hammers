@@ -17,11 +17,22 @@
  *
  */
 
-package mintychochip.forgehammers.strategies;
+package mintychochip.forgehammers.container;
 
-import mintychochip.forgehammers.container.HammerLike;
-import mintychochip.forgehammers.container.HammerLike.Traditional;
+import mintychochip.forgehammers.strategies.TraditionalHammerStrategy.Cardinal;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
+public interface BlockFaceGrabber {
 
-public interface StrategySelector<T,V> {
-  T selectStrategy(V v);
+  default Cardinal getCardinal(Player player) {
+    return this.getCardinalFromBlockFace(player.getTargetBlockFace(5));
+  }
+  private Cardinal getCardinalFromBlockFace(BlockFace blockFace) {
+    return switch (blockFace) {
+      case UP, DOWN -> Cardinal.UP_DOWN;
+      case EAST, WEST -> Cardinal.EAST_WEST;
+      case NORTH, SOUTH -> Cardinal.NORTH_SOUTH;
+      default -> null;
+    };
+  }
 }

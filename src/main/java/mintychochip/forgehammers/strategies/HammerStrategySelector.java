@@ -22,6 +22,11 @@ package mintychochip.forgehammers.strategies;
 import mintychochip.forgehammers.container.HammerLike;
 import mintychochip.forgehammers.container.HammerLike.Traditional;
 
-public interface StrategySelector<T,V> {
-  T selectStrategy(V v);
+public interface HammerStrategySelector extends StrategySelector<HammerStrategy, HammerLike> {
+  default HammerStrategy selectStrategy(HammerLike hammerLike) {
+    if (hammerLike instanceof Traditional) {
+      return TraditionalHammerStrategy.INSTANCE;
+    }
+    return null;
+  }
 }

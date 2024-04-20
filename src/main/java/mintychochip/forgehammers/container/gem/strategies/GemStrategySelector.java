@@ -17,11 +17,15 @@
  *
  */
 
-package mintychochip.forgehammers.strategies;
+package mintychochip.forgehammers.container.gem.strategies;
 
-import mintychochip.forgehammers.container.HammerLike;
-import mintychochip.forgehammers.container.HammerLike.Traditional;
+import mintychochip.forgehammers.container.gem.GemEnum;
+import mintychochip.forgehammers.strategies.StrategySelector;
 
-public interface StrategySelector<T,V> {
-  T selectStrategy(V v);
+public interface GemStrategySelector extends StrategySelector<GemStrategy, GemEnum> {
+  default GemStrategy selectStrategy(GemEnum gemEnum) {
+    return switch(gemEnum) {
+      case AUTO_SMELT, MAGNETIC -> gem -> 1;
+    };
+  }
 }

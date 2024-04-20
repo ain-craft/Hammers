@@ -30,6 +30,6 @@ import org.bukkit.entity.Player;
 
 public interface HammerStrategy {
 
-    void accept(Cardinal cardinal, BlockFace blockFace, Location origin, HammerLike hammerLike,
+    void accept(Cardinal cardinal, Location origin, HammerLike hammerLike,
         Consumer<Block> blockConsumer);
 }

@@ -32,11 +32,8 @@ public abstract class HammerLike implements IHammer, Embeddable {
 
   @SerializedName("deserialization-type")
   protected String deserializationType;
-
   @SerializedName("whitelist")
   protected final Set<Material> whitelist;
-  @SerializedName("perks")
-  protected final HammerPerks perks = new HammerPerks();
   @SerializedName("strength")
   protected float strength;
 
@@ -52,11 +49,6 @@ public abstract class HammerLike implements IHammer, Embeddable {
   public void setStrength(float strength) {
     this.strength = strength;
   }
-
-  public HammerPerks getPerks() {
-    return perks;
-  }
-
   @Override
   public boolean materialWhitelisted(Material material) {
     return whitelist.stream().anyMatch(entry -> entry == material);

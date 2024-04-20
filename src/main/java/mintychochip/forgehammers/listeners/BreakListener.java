@@ -19,26 +19,12 @@
 
 package mintychochip.forgehammers.listeners;
 
-import static org.bukkit.Material.IRON_INGOT;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import mintychochip.forgehammers.AbstractListener;
 import mintychochip.forgehammers.DurabilityReducer;
 import mintychochip.forgehammers.container.ForgeHammers;
-import mintychochip.forgehammers.container.HammerLike;
 import mintychochip.forgehammers.container.MaterialConverter;
-import mintychochip.forgehammers.events.DropBlockItemEvent;
-import mintychochip.forgehammers.events.ForgeBreakBaseEvent;
 import mintychochip.forgehammers.events.HammerBreakEvent;
-import mintychochip.forgehammers.events.PreBlockDropEvent;
 import mintychochip.forgehammers.strategies.TraditionalHammerStrategy.Cardinal;
-import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -46,10 +32,7 @@ import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
 public final class BreakListener extends AbstractListener implements DurabilityReducer,
@@ -64,12 +47,10 @@ public final class BreakListener extends AbstractListener implements DurabilityR
    */
   @EventHandler
   private void onBreakDeductDurability(final HammerBreakEvent event) { //any break event
-    Player player = event.getPlayer();
-    if (player.getGameMode() == GameMode.SURVIVAL) {
+    if (CommonPredicate.GAMEMODE_SURVIVAL.test(event.getPlayer())) {
       this.deductDurability(event.getItemStack());
     }
   }
-
   /**
    * Event is called for every hammer caused server-broken block
    *

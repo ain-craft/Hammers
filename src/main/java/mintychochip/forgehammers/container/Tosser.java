@@ -17,11 +17,12 @@
  *
  */
 
-package mintychochip.forgehammers.strategies;
+package mintychochip.forgehammers.container;
 
-import mintychochip.forgehammers.container.HammerLike;
-import mintychochip.forgehammers.container.HammerLike.Traditional;
+import org.bukkit.NamespacedKey;
+import org.bukkit.persistence.PersistentDataHolder;
 
-public interface StrategySelector<T,V> {
-  T selectStrategy(V v);
+public interface Tosser<T extends PersistentDataHolder,V> {
+
+  void toss (T container, V data, NamespacedKey key);
 }

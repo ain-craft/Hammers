@@ -17,11 +17,15 @@
  *
  */
 
-package mintychochip.forgehammers.strategies;
+package mintychochip.forgehammers.container.gem.strategies;
 
-import mintychochip.forgehammers.container.HammerLike;
-import mintychochip.forgehammers.container.HammerLike.Traditional;
+import java.util.Random;
+import mintychochip.forgehammers.container.gem.Gem;
 
-public interface StrategySelector<T,V> {
-  T selectStrategy(V v);
+public class SimpleGemStrategy implements GemStrategy {
+
+  @Override
+  public int create(Gem gem) {
+    return new Random().nextInt(gem.getMax() - gem.getMin()) + gem.getMin();
+  }
 }

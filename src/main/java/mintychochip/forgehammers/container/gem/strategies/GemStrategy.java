@@ -17,28 +17,11 @@
  *
  */
 
-package mintychochip.forgehammers.container;
+package mintychochip.forgehammers.container.gem.strategies;
 
-public class HammerPerks {
+import mintychochip.forgehammers.container.gem.Gem;
 
-  private boolean orePrevention = true;
-  private boolean autoSmelt = true;
+public interface GemStrategy {
+  int create(Gem gem);
 
-  private boolean magnetic = false;
-
-  public boolean isAutoSmelt() {
-    return autoSmelt;
-  }
-
-  public void setAutoSmelt(boolean autoSmelt) {
-    this.autoSmelt = autoSmelt;
-  }
-
-  public boolean isOrePrevention() {
-    return orePrevention;
-  }
-
-  public void setOrePrevention(boolean orePrevention) {
-    this.orePrevention = orePrevention;
-  }
 }

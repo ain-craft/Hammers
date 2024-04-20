@@ -41,7 +41,7 @@ public final class TraditionalHammerStrategy implements HammerStrategy {
   }
 
   @Override
-  public void accept(Cardinal cardinal, BlockFace blockFace, Location origin, HammerLike hammerLike,
+  public void accept(Cardinal cardinal, Location origin, HammerLike hammerLike,
       Consumer<Block> blockConsumer) {
     if (!(hammerLike instanceof HammerLike.Traditional traditional)) {
       return;
@@ -54,7 +54,7 @@ public final class TraditionalHammerStrategy implements HammerStrategy {
           case EAST_WEST -> new Vector(0, offset, j);
           case NORTH_SOUTH -> new Vector(offset, j, 0);
         };
-          blockConsumer.accept(origin.clone().add(v).getBlock());
+        blockConsumer.accept(origin.clone().add(v).getBlock());
       }
     }
   }

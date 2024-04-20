@@ -17,11 +17,29 @@
  *
  */
 
-package mintychochip.forgehammers.strategies;
+package mintychochip.forgehammers.container;
 
-import mintychochip.forgehammers.container.HammerLike;
-import mintychochip.forgehammers.container.HammerLike.Traditional;
+import java.util.HashMap;
+import java.util.Map;
 
-public interface StrategySelector<T,V> {
-  T selectStrategy(V v);
+public class ToolPerks {
+  public enum Perk {
+    ORE_PREVENT,
+    AUTO_SMELT,
+    MAGNETIC,
+    SELF_REPAIR;
+  }
+
+  public ToolPerks () {
+    perks.put(Perk.AUTO_SMELT,true);
+    perks.put(Perk.MAGNETIC,false);
+  }
+  public Map<Perk,Boolean> perks = new HashMap<>();
+
+  public Boolean getState(Perk perk) {
+    return this.perks.get(perk);
+  }
+  public void setState(Perk perk, boolean b) {
+    this.perks.put(perk,b);
+  }
 }

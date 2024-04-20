@@ -17,11 +17,10 @@
  *
  */
 
-package mintychochip.forgehammers;
+package mintychochip.forgehammers.container;
 
-public interface Activatable {
+import org.bukkit.persistence.PersistentDataHolder;
 
-    boolean isActive();
+public interface Grasper<T extends PersistentDataHolder, V> extends Grabber<T,V>,Tosser<T,V> {
 
-    void setActive(boolean b);
 }

@@ -19,6 +19,8 @@
 
 package mintychochip.forgehammers.events;
 
+import java.util.Collection;
+import java.util.function.Consumer;
 import mintychochip.forgehammers.container.HammerLike;
 import mintychochip.forgehammers.strategies.TraditionalHammerStrategy.Cardinal;
 import org.bukkit.block.Block;
@@ -37,13 +39,21 @@ public final class HammerPreBreakEvent extends ForgeBreakBaseEvent implements Pr
   private final float originHardness;
   private final Block block;
 
-  public HammerPreBreakEvent(Cardinal cardinal, Block block, Player player, HammerLike hammerLike, ItemStack itemStack,
-      float originHardness) {
+  private final Consumer<Collection<ItemStack>> itemConsumer;
+
+  public HammerPreBreakEvent(Block block, Cardinal cardinal, Player player, HammerLike hammerLike,
+      ItemStack itemStack,
+      float originHardness, Consumer<Collection<ItemStack>> itemConsumer) {
     super(cardinal, player);
     this.block = block;
     this.hammerLike = hammerLike;
     this.itemStack = itemStack;
     this.originHardness = originHardness;
+    this.itemConsumer = itemConsumer;
+  }
+
+  public void accept(Collection<ItemStack> drops) {
+    itemConsumer.accept(drops);
   }
 
   @Override

@@ -17,26 +17,27 @@
  *
  */
 
-package mintychochip.forgehammers;
+package mintychochip.forgehammers.container.gem;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import mintychochip.forgehammers.container.ForgeHammers;
-import org.bukkit.Material;
+import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
+import org.jetbrains.annotations.NotNull;
 
-public class Constants {
-  public static final String DESERIALIZATION_TYPE = "deserialization-type";
+public enum GemEnum implements Keyed {
+  AUTO_SMELT("autosmelt"),
+  MAGNETIC("magnetic");
+  private final String key;
 
-  public static final NamespacedKey GEM_CONTAINER = new NamespacedKey(ForgeHammers.getInstance(),"gems");
-  public static final NamespacedKey HAMMER_KEY = new NamespacedKey(ForgeHammers.getInstance(),
-      "hammer");
-  public static final List<Material> ORE_MATERIALS = Arrays.stream(Material.values()).filter(
-          material -> material.toString().contains("_ORE"))
-      .toList();
+  GemEnum(String key) {
+    this.key = key;
+  }
 
+  public String getNamespace() {
+    return key;
+  }
+  @Override
+  public @NotNull NamespacedKey getKey() {
+    return new NamespacedKey(ForgeHammers.getInstance(),key);
+  }
 }

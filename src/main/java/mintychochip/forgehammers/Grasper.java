@@ -20,6 +20,7 @@
 package mintychochip.forgehammers;
 
 import mintychochip.forgehammers.container.HammerLike;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
@@ -32,4 +33,6 @@ public interface Grasper {
     ItemStack getItemInUse(ItemStack main, ItemStack off);
 
     HammerLike grab(PlayerInventory playerInventory);
+
+    boolean itemContainsKey(ItemStack itemStack, NamespacedKey namespacedKey);
 }

@@ -20,18 +20,15 @@
 package mintychochip.forgehammers.events;
 
 import java.util.Collection;
-import mintychochip.forgehammers.container.HammerLike;
-import mintychochip.forgehammers.strategies.TraditionalHammerStrategy.Cardinal;
 import mintychochip.genesis.events.AbstractEvent;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
-public class DropBlockItemEvent extends AbstractEvent  {
+public class DropEvent extends AbstractEvent  {
 
   private final Location dropLocation;
   private Collection<ItemStack> drops;
-  public DropBlockItemEvent(Location dropLocation, Collection<ItemStack> drops) {
+  public DropEvent(Location dropLocation, Collection<ItemStack> drops) {
     this.dropLocation = dropLocation;
     this.drops = drops;
   }

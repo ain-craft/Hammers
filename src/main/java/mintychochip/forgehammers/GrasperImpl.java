@@ -93,4 +93,10 @@ public class GrasperImpl implements Grasper {
     }
     return grab;
   }
+  @Override
+  public boolean itemContainsKey(ItemStack itemStack, NamespacedKey namespacedKey) {
+    ItemMeta itemMeta = itemStack.getItemMeta();
+    PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
+    return pdc.has(namespacedKey,PersistentDataType.STRING);
+  }
 }

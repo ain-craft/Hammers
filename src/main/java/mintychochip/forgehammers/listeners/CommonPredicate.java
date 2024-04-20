@@ -17,9 +17,12 @@
  *
  */
 
-package mintychochip.forgehammers.commands;
+package mintychochip.forgehammers.listeners;
 
-public class ForgeReload {
-
+import java.util.function.Predicate;
+import org.bukkit.GameMode;
+import org.bukkit.entity.Player;
+public class CommonPredicate {
+  public static final Predicate<Player> GAMEMODE_SURVIVAL = player -> player.getGameMode() == GameMode.SURVIVAL;
 
 }
