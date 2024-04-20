@@ -54,9 +54,7 @@ public final class TraditionalHammerStrategy implements HammerStrategy {
           case EAST_WEST -> new Vector(0, offset, j);
           case NORTH_SOUTH -> new Vector(offset, j, 0);
         };
-        if(!v.equals(new Vector(0,0,0))) {
           blockConsumer.accept(origin.clone().add(v).getBlock());
-        }
       }
     }
   }

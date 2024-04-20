@@ -21,29 +21,57 @@ package mintychochip.forgehammers.events;
 
 import java.util.Collection;
 import mintychochip.forgehammers.container.HammerLike;
-import mintychochip.forgehammers.strategies.TraditionalHammerStrategy.Cardinal;
 import mintychochip.genesis.events.AbstractEvent;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
+import org.bukkit.event.Cancellable;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.entity.Player;
 
-public class DropBlockItemEvent extends AbstractEvent  {
+public class PreBlockDropEvent extends AbstractEvent implements Cancellable {
 
+  private boolean cancelled = false;
   private final Location dropLocation;
   private Collection<ItemStack> drops;
-  public DropBlockItemEvent(Location dropLocation, Collection<ItemStack> drops) {
+
+  private final HammerLike hammerLike;
+  private final Player player;
+
+
+  public PreBlockDropEvent(Location dropLocation, Collection<ItemStack> drops,
+      HammerLike hammerLike, Player player) {
     this.dropLocation = dropLocation;
     this.drops = drops;
+    this.hammerLike = hammerLike;
+    this.player = player;
+  }
+
+  public Player getPlayer() {
+    return player;
+  }
+
+  public Location getDropLocation() {
+    return dropLocation;
   }
 
   public void setDrops(Collection<ItemStack> drops) {
     this.drops = drops;
   }
+
   public Collection<ItemStack> getDrops() {
     return drops;
   }
 
-  public Location getDropLocation() {
-    return dropLocation;
+  public HammerLike getHammerLike() {
+    return hammerLike;
+  }
+
+  @Override
+  public boolean isCancelled() {
+    return cancelled;
+  }
+
+  @Override
+  public void setCancelled(boolean b) {
+    this.cancelled = b;
   }
 }

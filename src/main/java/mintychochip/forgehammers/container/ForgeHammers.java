@@ -21,11 +21,12 @@ package mintychochip.forgehammers.container;
 
 import java.util.Arrays;
 import java.util.List;
-import mintychochip.forgehammers.BreakListener;
+import mintychochip.forgehammers.listeners.BreakListener;
 import mintychochip.forgehammers.Constants;
 import mintychochip.forgehammers.GrasperImpl;
-import mintychochip.forgehammers.HammerListener;
-import mintychochip.forgehammers.PreBreakListener;
+import mintychochip.forgehammers.listeners.HammerListener;
+import mintychochip.forgehammers.listeners.DropListener;
+import mintychochip.forgehammers.listeners.PreBreakListener;
 import mintychochip.forgehammers.commands.ForgeHammerCreation;
 import mintychochip.forgehammers.commands.ForgeHammerRadius;
 import mintychochip.forgehammers.config.HammerConfig;
@@ -54,7 +55,7 @@ public final class ForgeHammers extends JavaPlugin {
     NamespacedKey hammerKey = new NamespacedKey(this, "hammer");
     GrasperImpl grasper = new GrasperImpl(hammerFactory, hammerKey);
     List<Listener> listeners = Arrays.asList(new BreakListener(this), new PreBreakListener(this),
-        new HammerListener(this, grasper));
+        new HammerListener(this, grasper), new DropListener(this));
     HammerConfig hammerConfig = new HammerConfig("hammer.yml", this);
     GenericMainCommandManager genericMainCommandManager = new GenericMainCommandManager("forge",
         "asd");

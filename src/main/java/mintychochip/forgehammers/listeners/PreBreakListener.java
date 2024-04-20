@@ -17,13 +17,16 @@
  *
  */
 
-package mintychochip.forgehammers;
+package mintychochip.forgehammers.listeners;
 
 import java.util.function.Predicate;
+import mintychochip.forgehammers.AbstractListener;
 import mintychochip.forgehammers.container.ForgeHammers;
 import mintychochip.forgehammers.events.DropBlockItemEvent;
 import mintychochip.forgehammers.events.HammerBreakEvent;
 import mintychochip.forgehammers.events.HammerPreBreakEvent;
+import mintychochip.forgehammers.events.PreBlockDropEvent;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -42,10 +45,6 @@ public final class PreBreakListener extends AbstractListener {
   };
   private final Predicate<HammerPreBreakEvent> blockIsNotWhitelisted = event -> !event.getHammer()
       .blockWhitelisted(event.getBlock());
-  private final Predicate<HammerPreBreakEvent> blockIsOre = event -> {
-    Material type = event.getBlock().getType();
-    return Constants.ORE_MATERIALS.contains(type) && event.getHammer().getPerks().isOrePrevention() && !event.getPlayer().isSneaking();
-  };
   private final Predicate<HammerPreBreakEvent> blockIsLowerThanOriginHardness = event -> {
     float originHardness = event.getOriginHardness();
     return originHardness + RANGE_ADJUSTMENT < event.getBlock().getType().getHardness();
@@ -68,21 +67,10 @@ public final class PreBreakListener extends AbstractListener {
       return;
     }
     Bukkit.getPluginManager()
-        .callEvent(new HammerBreakEvent(event.getCardinal(),event.getPlayer(), event.getItemStack(), event.getBlock(), drops -> {
-          if(drops != null) {
-            Bukkit.getPluginManager().callEvent(new DropBlockItemEvent(event.getCardinal(),event.getBlock().getLocation(),drops,event.getHammer(),event.getItemStack()));
-          }
+        .callEvent(new HammerBreakEvent(event.getCardinal(), event.getBlock(), event.getPlayer(),
+            event.getItemStack(), drops -> {
+          Bukkit.getPluginManager().callEvent(new PreBlockDropEvent(event.getBlock().getLocation(),drops,event.getHammer(),event.getPlayer()));
         }));
-  }
-
-  @EventHandler(priority = EventPriority.HIGHEST)
-  private void checkPerks(final HammerPreBreakEvent event) {
-    if (event.isCancelled()) {
-      return;
-    }
-    if (blockIsOre.test(event)) {
-      event.setCancelled(true);
-    }
   }
 
   @EventHandler(priority = EventPriority.HIGH)

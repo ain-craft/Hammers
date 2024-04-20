@@ -17,8 +17,10 @@
  *
  */
 
-package mintychochip.forgehammers;
+package mintychochip.forgehammers.listeners;
 
+import mintychochip.forgehammers.AbstractListener;
+import mintychochip.forgehammers.Grasper;
 import mintychochip.forgehammers.container.ForgeHammers;
 import mintychochip.forgehammers.container.HammerLike;
 import mintychochip.forgehammers.events.DropBlockItemEvent;
@@ -26,6 +28,7 @@ import mintychochip.forgehammers.events.HammerPreBreakEvent;
 import mintychochip.forgehammers.strategies.HammerStrategy;
 import mintychochip.forgehammers.strategies.StrategySelector;
 import mintychochip.forgehammers.strategies.TraditionalHammerStrategy.Cardinal;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -68,8 +71,6 @@ public class HammerListener extends AbstractListener implements StrategySelector
     event.setDropItems(false);
     final Block origin = event.getBlock();
     Cardinal cardinal = this.getCardinalFromBlockFace(targetBlockFace);
-
-    Bukkit.getPluginManager().callEvent(new DropBlockItemEvent(cardinal,origin.getLocation(),origin.getDrops(itemInUse),grab,itemInUse));
     final float originHardness = origin.getType().getHardness();
     this.selectStrategy(grab)
         .accept(cardinal, event.getPlayer().getTargetBlockFace(7), origin.getLocation(),

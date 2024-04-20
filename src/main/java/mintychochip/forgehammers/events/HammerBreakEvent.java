@@ -20,31 +20,28 @@
 package mintychochip.forgehammers.events;
 
 import java.util.Collection;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import mintychochip.forgehammers.container.HammerLike;
 import mintychochip.forgehammers.strategies.TraditionalHammerStrategy.Cardinal;
-import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.inventory.ItemStack;
 
-public final class HammerBreakEvent extends ForgeBreakBaseEvent implements PostfacingBlockEvent {
+public final class HammerBreakEvent extends ForgeBreakBaseEvent implements PostfacingBlockEvent{
 
   private final ItemStack itemStack;
+  private final Block block;
+  private final Consumer<Collection<ItemStack>> itemConsumer;
 
-  private final Consumer<Collection<ItemStack>> successful;
-
-  public HammerBreakEvent(Cardinal cardinal, Player player, ItemStack itemStack, Block block,
-      Consumer<Collection<ItemStack>> successful) {
+  public HammerBreakEvent(Cardinal cardinal, Block block, Player player, ItemStack itemStack, Consumer<Collection<ItemStack>> itemConsumer) {
     super(cardinal, player);
-    this.itemStack = itemStack;
     this.block = block;
-    this.successful = successful;
+    this.itemStack = itemStack;
+    this.itemConsumer = itemConsumer;
   }
-
-  public void accept(Collection<ItemStack> drops) {
-    this.successful.accept(drops);
+  public void accept(Collection<ItemStack> items) {
+    itemConsumer.accept(items);
   }
 
   @Override
