@@ -26,7 +26,9 @@ import mintychochip.forgehammers.container.gem.GemEnum;
 import mintychochip.forgehammers.container.gem.sub.triggers.TriggerOnBlockDrop;
 import mintychochip.forgehammers.events.PreBlockDropEvent;
 import mintychochip.genesis.util.Rarity;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.inventory.ItemStack;
 public class AutoSmelt extends Gem implements TriggerOnBlockDrop {
   public AutoSmelt(GemEnum gemEnum, String name,
@@ -39,6 +41,8 @@ public class AutoSmelt extends Gem implements TriggerOnBlockDrop {
     event.setDrops(event.getDrops().stream()
         .map(drop -> new ItemStack(this.getSmeltedItemType(drop.getType()), drop.getAmount()))
         .toList());
+    Location blockLocation = event.getBlockLocation();
+    blockLocation.getWorld().spawnParticle(Particle.LAVA,blockLocation,1,0,0,0,5);
   }
   private Material getSmeltedItemType(Material material) {
     return switch (material) {

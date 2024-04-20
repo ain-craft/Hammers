@@ -68,12 +68,12 @@ public final class BreakListener extends AbstractListener implements DurabilityR
   private void breakBlock(Block block, Cardinal cardinal) {
     Location location = block.getLocation();
     Vector v = switch (cardinal) {
-      case EAST_WEST -> new Vector(0, 0.2, 0.2);
-      case NORTH_SOUTH -> new Vector(0.2, 0.2, 0);
+      case EAST_WEST -> new Vector(0, 0.2, 0.5);
+      case NORTH_SOUTH -> new Vector(0.5, 0.2, 0);
       case UP_DOWN -> new Vector(0.25, 0, 0.25);
     };
     location.getWorld()
-        .spawnParticle(Particle.BLOCK_CRACK, location, 20, v.getX(), v.getY(), v.getZ(), 1.0,
+        .spawnParticle(Particle.BLOCK_CRACK, location, 10, v.getX(), v.getY(), v.getZ(), 1.0,
             block.getBlockData());
     block.setType(Material.AIR);
   }

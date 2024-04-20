@@ -45,7 +45,6 @@ public class BlockDropListener extends AbstractListener {
     if (event.getGemContainer() == null) {
       return;
     }
-    Arrays.stream(ExecutionPriority.values()).forEach(val -> Bukkit.broadcast(Component.text(val.toString())));
     for (ExecutionPriority value : ExecutionPriority.values()) {
       event.getGemContainer().keySet().stream().map(gem -> Gem.getGem(gem.getNamespace()))
           .filter(gem -> gem instanceof TriggerOnBlockDrop).map(gem -> (TriggerOnBlockDrop) gem)
