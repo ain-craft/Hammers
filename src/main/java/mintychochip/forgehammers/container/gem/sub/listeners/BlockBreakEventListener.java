@@ -21,39 +21,52 @@ package mintychochip.forgehammers.container.gem.sub.listeners;
 
 import mintychochip.forgehammers.AbstractListener;
 import mintychochip.forgehammers.Constants;
+import mintychochip.forgehammers.GrasperImpl;
 import mintychochip.forgehammers.container.ForgeHammers;
 import mintychochip.forgehammers.container.Grasper;
 import mintychochip.forgehammers.container.gem.Gem;
 import mintychochip.forgehammers.container.gem.GemAnno.ExecutionPriority;
 import mintychochip.forgehammers.container.gem.GemContainer;
 import mintychochip.forgehammers.container.gem.sub.triggers.TriggerOnBlockDrop;
-import mintychochip.forgehammers.events.FakeBlockDropItemEvent;
+import mintychochip.forgehammers.container.gem.sub.triggers.TriggerOnBreakEvent;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.block.BlockDropItemEvent;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class BlockDropListener extends AbstractListener {
+public class BlockBreakEventListener extends AbstractListener {
 
-  private final Grasper<ItemMeta,GemContainer> grasper = new Grasper<>() {
-  };
-  public BlockDropListener(ForgeHammers instance) {
+  public BlockBreakEventListener(ForgeHammers instance) {
     super(instance);
   }
 
-  @EventHandler(priority = EventPriority.HIGH)
-  private void onBlockDropEvent(final FakeBlockDropItemEvent event) {
-    ItemStack tool = event.getItem();
-    GemContainer grab = grasper.grab(tool.getItemMeta(), Constants.GEM_CONTAINER, GemContainer.class);
-    if(grab == null) {
+  @EventHandler
+  private void onBreak(BlockBreakEvent event) {
+    Player player = event.getPlayer();
+    ItemStack itemInUse = this.getItemInUse(player.getInventory());
+
+    final Grasper<ItemMeta, GemContainer> grasper = new Grasper<>() {
+    };
+    GemContainer grab = grasper.grab(itemInUse.getItemMeta(), Constants.GEM_CONTAINER,
+        GemContainer.class);
+    if (grab == null) {
       return;
     }
     for (ExecutionPriority value : ExecutionPriority.values()) {
       grab.keySet().stream().map(gem -> Gem.getGem(gem.getNamespace()))
-          .filter(gem -> gem instanceof TriggerOnBlockDrop).map(gem -> (TriggerOnBlockDrop) gem)
+          .filter(gem -> gem instanceof TriggerOnBreakEvent).map(gem -> (TriggerOnBreakEvent) gem)
           .filter(triggerOnBlockDrop -> triggerOnBlockDrop.getPrio() == value)
           .forEach(triggerOnBlockDrop -> triggerOnBlockDrop.execute(event,grab.getLevel(((Gem) triggerOnBlockDrop).getGemEnum())));
     }
+  }
+
+  private ItemStack getItemInUse(PlayerInventory inventory) {
+    return this.getItemInUse(inventory.getItemInMainHand(), inventory.getItemInOffHand());
+  }
+
+  private ItemStack getItemInUse(ItemStack main, ItemStack off) {
+    return main.getType().isAir() ? off : main;
   }
 }

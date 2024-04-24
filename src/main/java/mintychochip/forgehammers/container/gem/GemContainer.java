@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.Set;
 import mintychochip.forgehammers.container.ForgeHammers;
 import mintychochip.genesis.items.interfaces.Embeddable;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 
 public class GemContainer implements Embeddable {

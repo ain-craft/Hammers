@@ -22,17 +22,19 @@ package mintychochip.forgehammers.container.gem;
 import java.util.ArrayList;
 import java.util.List;
 import mintychochip.forgehammers.container.ForgeHammers;
+import mintychochip.forgehammers.container.Grasper;
 import mintychochip.forgehammers.container.gem.strategies.GemStrategySelector;
 import mintychochip.genesis.util.Rarity;
-import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class Gem implements Keyed, GemStrategySelector {
-  public static final Gem AUTO_SMELT = getGem("autosmelt");
-  public static final Gem MAGNETIC = getGem("magnetic");
+  public static final Gem AUTO_SMELT = getGem(GemEnum.AUTO_SMELT.getNamespace());
+  public static final Gem MAGNETIC = getGem(GemEnum.MAGNETIC.getNamespace());
+  public static final Gem GOLD_DIGGER = getGem(GemEnum.GOLD_DIGGER.getNamespace());
   private final Rarity rarity;
   private final String description;
   private final String name;
@@ -51,6 +53,10 @@ public abstract class Gem implements Keyed, GemStrategySelector {
   public static Gem getGem(String namespace) {
     NamespacedKey namespacedKey = new NamespacedKey(ForgeHammers.getInstance(), namespace);
     return GemRegistry.INSTANCE.get(namespacedKey);
+  }
+  public static void slot(ItemStack itemStack) {
+    ItemMeta itemMeta = itemStack.getItemMeta();
+    Grasper<ItemMeta,GemContainer> gemGrasper = new Grasper<>() {};
   }
   public int createValue() {
     return this.selectStrategy(gemEnum).create(this);

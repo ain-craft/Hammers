@@ -17,13 +17,22 @@
  *
  */
 
-package mintychochip.forgehammers.events;
+package mintychochip.forgehammers.container;
 
-import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
+import java.util.Random;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
+import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
-public interface PostfacingBlockEvent extends Listener, BlockEvent {
-    ItemStack getItemStack();
-    Player getPlayer(); // for incrementation
+public interface Fortune {
+  default int fortune(ItemStack drop, int max) {
+    int i = drop.getAmount() + this.additional(max);
+    return !drop.getType().isBlock() ? i : 1;
+  }
+  private int additional(int max) {
+    return new Random().nextInt(max);
+  }
+
 }

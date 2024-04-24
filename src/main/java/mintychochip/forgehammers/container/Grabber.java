@@ -19,10 +19,19 @@
 
 package mintychochip.forgehammers.container;
 
+import com.google.gson.Gson;
 import org.bukkit.NamespacedKey;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataHolder;
+import org.bukkit.persistence.PersistentDataType;
 
 public interface Grabber<T extends PersistentDataHolder, V> {
 
-  V grab(T container, NamespacedKey key);
+  default V grab(T container, NamespacedKey key, Class<V> clazz) {
+    PersistentDataContainer pdc = container.getPersistentDataContainer();
+    if(pdc.has(key)) {
+      return new Gson().fromJson(pdc.get(key, PersistentDataType.STRING),clazz);
+    }
+    return null;
+  }
 }

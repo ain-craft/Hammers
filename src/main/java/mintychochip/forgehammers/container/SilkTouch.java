@@ -17,18 +17,18 @@
  *
  */
 
-package mintychochip.forgehammers.events;
+package mintychochip.forgehammers.container;
 
-import mintychochip.forgehammers.container.HammerLike;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
-public interface PrefacingBlockEvent extends Listener, BlockEvent {
-
-    ItemStack getItemStack();
-    HammerLike getHammer();
-    Player getPlayer();
-
-    float getOriginHardness();
+public interface SilkTouch {
+  default Material silk(ItemStack tool, Block block, ItemStack drop) {
+    if(tool.containsEnchantment(Enchantment.SILK_TOUCH)) {
+      return block.getType();
+    }
+    return drop.getType();
+  }
 }

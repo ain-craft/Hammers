@@ -22,23 +22,20 @@ package mintychochip.forgehammers.container;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import mintychochip.forgehammers.commands.SetGem;
-import mintychochip.forgehammers.container.ToolPerks.Perk;
-import mintychochip.forgehammers.container.gem.GemEnum;
-import mintychochip.forgehammers.container.gem.GemGrasper;
-import mintychochip.forgehammers.container.gem.sub.listeners.BlockDropListener;
-import mintychochip.forgehammers.listeners.BreakListener;
 import mintychochip.forgehammers.Constants;
 import mintychochip.forgehammers.GrasperImpl;
-import mintychochip.forgehammers.listeners.HammerListener;
-import mintychochip.forgehammers.listeners.DropListener;
-import mintychochip.forgehammers.listeners.PreBreakListener;
 import mintychochip.forgehammers.commands.ForgeHammerCreation;
 import mintychochip.forgehammers.commands.ForgeHammerRadius;
+import mintychochip.forgehammers.commands.SetGem;
+import mintychochip.forgehammers.commands.ToolInfo;
 import mintychochip.forgehammers.config.HammerConfig;
+import mintychochip.forgehammers.container.gem.GemEnum;
+import mintychochip.forgehammers.container.gem.sub.listeners.BlockBreakEventListener;
+import mintychochip.forgehammers.container.gem.sub.listeners.BlockDropListener;
+import mintychochip.forgehammers.listeners.HammerListener;
+import mintychochip.forgehammers.listeners.ToolBreakListener;
 import mintychochip.forgehammers.typeadapter.RuntimeTypeAdapterFactory;
 import mintychochip.genesis.commands.abstraction.GenericMainCommandManager;
-import mintychochip.genesis.commands.abstraction.GenericSubCommandManager;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -61,19 +58,20 @@ public final class ForgeHammers extends JavaPlugin {
         .registerSubtype(HammerLike.Patterned.class, "patterned");
     NamespacedKey hammerKey = new NamespacedKey(this, "hammer");
     GrasperImpl grasper = new GrasperImpl(hammerFactory, hammerKey);
-    List<Listener> listeners = Arrays.asList(new BreakListener(this), new PreBreakListener(this),
-        new HammerListener(this, grasper, new GemGrasper()), new DropListener(this), new BlockDropListener(this));
+    List<Listener> listeners = Arrays.asList(
+        new HammerListener(this, grasper), new BlockDropListener(this), new ToolBreakListener(this), new BlockBreakEventListener(this));
     HammerConfig hammerConfig = new HammerConfig("hammer.yml", this);
     GenericMainCommandManager genericMainCommandManager1 = new GenericMainCommandManager("gems",
         "asd");
     genericMainCommandManager1.addSubCommand(new SetGem("set","asd", Arrays.stream(GemEnum.values()).map(Enum::toString).collect(
-        Collectors.toSet()), new GemGrasper()));
+        Collectors.toSet())));
     GenericMainCommandManager genericMainCommandManager = new GenericMainCommandManager("forge",
         "asd");
     genericMainCommandManager.addSubCommand(
         new ForgeHammerCreation("hammer", "asd", hammerConfig, grasper));
     genericMainCommandManager.addSubCommand(
         new ForgeHammerRadius("radius", "sets radius", hammerConfig, grasper));
+    genericMainCommandManager.addSubCommand(new ToolInfo("info","asd"));
     getCommand("forge").setExecutor(genericMainCommandManager);
     getCommand("gems").setExecutor(genericMainCommandManager1);
   }

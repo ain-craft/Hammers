@@ -17,29 +17,32 @@
  *
  */
 
-package mintychochip.forgehammers.container;
+package mintychochip.forgehammers.events;
 
-import java.util.HashMap;
-import java.util.Map;
+import mintychochip.forgehammers.container.Tool;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
-public class ToolPerks {
-  public enum Perk {
-    ORE_PREVENT,
-    AUTO_SMELT,
-    MAGNETIC,
-    SELF_REPAIR;
+public class ToolBreakEvent extends BlockBreakEvent {
+
+  private final ItemStack item;
+
+  private final Tool tool;
+  public ToolBreakEvent(@NotNull Block theBlock,
+      @NotNull Player player, ItemStack item, Tool tool) {
+    super(theBlock, player);
+    this.item = item;
+    this.tool = tool;
   }
 
-  public ToolPerks () {
-    perks.put(Perk.AUTO_SMELT,true);
-    perks.put(Perk.MAGNETIC,false);
+  public Tool getTool() {
+    return tool;
   }
-  public Map<Perk,Boolean> perks = new HashMap<>();
 
-  public Boolean getState(Perk perk) {
-    return this.perks.get(perk);
-  }
-  public void setState(Perk perk, boolean b) {
-    this.perks.put(perk,b);
+  public ItemStack getItem() {
+    return item;
   }
 }

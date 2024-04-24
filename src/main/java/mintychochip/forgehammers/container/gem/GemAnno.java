@@ -29,9 +29,13 @@ import java.lang.annotation.Target;
 public @interface GemAnno {
 
   enum ExecutionPriority {
+    LOWEST,
     LOW,
+    NORMAL,
     HIGH,
-    HIGHEST;
+    HIGHEST,
+    MONITOR;
   }
+
   ExecutionPriority priority();
 }

@@ -20,11 +20,7 @@
 package mintychochip.forgehammers;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import mintychochip.forgehammers.container.ForgeHammers;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -32,6 +28,7 @@ import org.bukkit.NamespacedKey;
 public class Constants {
   public static final String DESERIALIZATION_TYPE = "deserialization-type";
 
+  public static final NamespacedKey SAW_KEY = new NamespacedKey(ForgeHammers.getInstance(),"saw");
   public static final NamespacedKey GEM_CONTAINER = new NamespacedKey(ForgeHammers.getInstance(),"gems");
   public static final NamespacedKey HAMMER_KEY = new NamespacedKey(ForgeHammers.getInstance(),
       "hammer");

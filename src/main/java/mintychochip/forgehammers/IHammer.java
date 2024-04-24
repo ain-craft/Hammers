@@ -19,7 +19,6 @@
 
 package mintychochip.forgehammers;
 
-import java.util.Set;
 import org.bukkit.Material;
 
 public interface IHammer {

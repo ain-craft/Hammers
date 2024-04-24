@@ -28,8 +28,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 
-public abstract class HammerLike implements IHammer, Embeddable {
-
+public abstract class HammerLike implements IHammer, Embeddable, Tool {
   @SerializedName("deserialization-type")
   protected String deserializationType;
   @SerializedName("whitelist")
@@ -92,7 +91,7 @@ public abstract class HammerLike implements IHammer, Embeddable {
       super(deserializationType, whitelist);
     }
 
-    public static Traditional create(HammerType type, Tool whitelist) {
+    public static Traditional create(HammerType type, ToolType whitelist) {
       return new Traditional(type.getDeserializationType(), whitelist.getWhitelist());
     }
 
@@ -123,7 +122,7 @@ public abstract class HammerLike implements IHammer, Embeddable {
       return pattern;
     }
 
-    public static Patterned create(HammerType type, Tool whitelist) {
+    public static Patterned create(HammerType type, ToolType whitelist) {
       return new Patterned(type.getDeserializationType(), whitelist.getWhitelist());
     }
   }

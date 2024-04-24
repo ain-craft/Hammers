@@ -19,17 +19,15 @@
 
 package mintychochip.forgehammers.strategies;
 
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import mintychochip.forgehammers.container.HammerLike;
+import mintychochip.forgehammers.container.Tool;
 import mintychochip.forgehammers.strategies.TraditionalHammerStrategy.Cardinal;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Player;
 
 public interface HammerStrategy {
 
-    void accept(Cardinal cardinal, Location origin, HammerLike hammerLike,
+    void accept(Cardinal cardinal, Location origin, Tool tool,
         Consumer<Block> blockConsumer);
 }

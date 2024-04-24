@@ -19,9 +19,7 @@
 
 package mintychochip.forgehammers.container.gem.sub;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import mintychochip.forgehammers.container.Fortune;
 import mintychochip.forgehammers.container.gem.Gem;
 import mintychochip.forgehammers.container.gem.GemAnno;
 import mintychochip.forgehammers.container.gem.GemAnno.ExecutionPriority;
@@ -29,26 +27,27 @@ import mintychochip.forgehammers.container.gem.GemEnum;
 import mintychochip.forgehammers.container.gem.sub.triggers.TriggerOnBlockDrop;
 import mintychochip.forgehammers.events.FakeBlockDropItemEvent;
 import mintychochip.genesis.util.Rarity;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.Material;
 
-public class Magnetic extends Gem implements TriggerOnBlockDrop {
+public class GoldDigger extends Gem implements TriggerOnBlockDrop, Fortune {
 
-  public Magnetic(GemEnum gemEnum, String name,
+  public GoldDigger(GemEnum gemEnum, String name,
       String description, int min, int max, Rarity rarity) {
     super(gemEnum, name, description, min, max, rarity);
   }
 
   @Override
-  @GemAnno(priority = ExecutionPriority.MONITOR)
+  @GemAnno(priority = ExecutionPriority.HIGH)
   public void execute(FakeBlockDropItemEvent event, int level) {
-    List<ItemStack> remaining = new ArrayList<>();
-    for (ItemStack drop : event.getDrops()) {
-      HashMap<Integer, ItemStack> integerItemStackHashMap = event.getPlayer().getInventory()
-          .addItem(drop);
-      if (!integerItemStackHashMap.isEmpty()) {
-        remaining.add(drop);
+    event.setDrops(event.getDrops().stream().peek(drop -> {
+      if (drop.getType() == Material.GOLD_NUGGET) {
+        double amount = (double) drop.getAmount() * this.multiplier(level);
+        drop.setAmount((int) amount);
       }
-    }
-    event.setDrops(remaining);
+    }).toList());
   }
+  private double multiplier(int level) {
+    return Math.sqrt(level + 1);
+  }
+
 }

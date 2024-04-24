@@ -20,11 +20,8 @@
 package mintychochip.forgehammers.container;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Random;
-import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
@@ -36,13 +33,13 @@ public interface MaterialConverter {
     List<ItemStack> drops = new ArrayList<>();
     for (ItemStack drop : block.getDrops(itemStack)) {
       final Material itemMaterial = this.getMaterial(itemStack, block, drop);
-      final int amount = this.getAmount(drop, itemStack);
+      final int amount = this.additionalAmount(drop, itemStack);
       drops.add(new ItemStack(itemMaterial, amount));
     }
     return drops;
   }
 
-  private int getAmount(ItemStack drop, ItemStack itemStack) {
+  default int additionalAmount(ItemStack drop, ItemStack itemStack) {
     int amount = drop.getAmount();
     if (itemStack.containsEnchantment(Enchantment.LOOT_BONUS_BLOCKS)) {
       amount += this.additionalDrops(itemStack.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));

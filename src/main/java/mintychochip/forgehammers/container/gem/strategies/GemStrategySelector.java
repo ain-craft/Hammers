@@ -26,6 +26,7 @@ public interface GemStrategySelector extends StrategySelector<GemStrategy, GemEn
   default GemStrategy selectStrategy(GemEnum gemEnum) {
     return switch(gemEnum) {
       case AUTO_SMELT, MAGNETIC -> gem -> 1;
+      case GOLD_DIGGER -> new SimpleGemStrategy();
     };
   }
 }

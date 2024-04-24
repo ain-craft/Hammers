@@ -17,12 +17,18 @@
  *
  */
 
-package mintychochip.forgehammers.listeners;
+package mintychochip.forgehammers.strategies;
 
-import java.util.function.Predicate;
-import org.bukkit.GameMode;
-import org.bukkit.entity.Player;
-public class CommonPredicate {
-  public static final Predicate<Player> GAMEMODE_SURVIVAL = player -> player.getGameMode() == GameMode.SURVIVAL;
+import java.util.function.Consumer;
+import mintychochip.forgehammers.container.Tool;
+import mintychochip.forgehammers.strategies.TraditionalHammerStrategy.Cardinal;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
 
+public class PatternedHammerStrategy implements HammerStrategy {
+
+  @Override
+  public void accept(Cardinal cardinal, Location origin, Tool tool, Consumer<Block> blockConsumer) {
+
+  }
 }

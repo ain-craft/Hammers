@@ -26,9 +26,9 @@ import org.jetbrains.annotations.NotNull;
 
 public enum GemEnum implements Keyed {
   AUTO_SMELT("autosmelt"),
-  MAGNETIC("magnetic");
+  MAGNETIC("magnetic"),
+  GOLD_DIGGER("golddigger");
   private final String key;
-
   GemEnum(String key) {
     this.key = key;
   }

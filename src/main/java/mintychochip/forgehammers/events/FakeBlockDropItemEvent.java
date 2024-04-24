@@ -19,38 +19,38 @@
 
 package mintychochip.forgehammers.events;
 
-import mintychochip.forgehammers.strategies.TraditionalHammerStrategy.Cardinal;
+import java.util.Collection;
 import mintychochip.genesis.events.AbstractEvent;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
+import org.bukkit.inventory.ItemStack;
 
-public abstract class ForgeBreakBaseEvent extends AbstractEvent {
+public class FakeBlockDropItemEvent extends AbstractEvent {
+  private final Player player;
+  private final Location location;
+  private final ItemStack item;
+  private Collection<ItemStack> drops;
+  public FakeBlockDropItemEvent(Player player, Location location, Collection<ItemStack> drops, ItemStack item) {
+    this.player = player;
+    this.location = location;
+    this.drops = drops;
+    this.item = item;
+  }
+  public ItemStack getItem() {
+    return item;
+  }
+  public void setDrops(Collection<ItemStack> drops) {
+    this.drops = drops;
+  }
+  public Player getPlayer() {
+    return player;
+  }
 
-    /**
-     * Post event, is only called by 'ForgePreBlockBreakEvent'
-     */
+  public Location getLocation() {
+    return location;
+  }
 
-
-    protected final Player player;
-
-    protected Block block;
-
-    protected final Cardinal cardinal;
-
-    public Cardinal getCardinal() {
-        return cardinal;
-    }
-
-    protected ForgeBreakBaseEvent(Cardinal cardinal, Player player) {
-        this.cardinal = cardinal;
-        this.player = player;
-    }
-    public Player getPlayer() {
-        return player;
-    }
-
+  public Collection<ItemStack> getDrops() {
+    return drops;
+  }
 }

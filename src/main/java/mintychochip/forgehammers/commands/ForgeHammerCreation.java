@@ -25,9 +25,9 @@ import mintychochip.forgehammers.container.ForgeHammers;
 import mintychochip.forgehammers.container.HammerLike;
 import mintychochip.forgehammers.container.HammerLike.Traditional;
 import mintychochip.forgehammers.container.HammerType;
+import mintychochip.forgehammers.container.ToolType;
 import mintychochip.forgehammers.container.ToolFactory;
 import mintychochip.forgehammers.container.ToolMaterialTypeConverter;
-import mintychochip.forgehammers.container.Tool;
 import mintychochip.genesis.commands.abstraction.GenericCommandObject;
 import mintychochip.genesis.commands.abstraction.SubCommand;
 import mintychochip.genesis.config.abstraction.GenesisConfigurationSection;
@@ -64,7 +64,7 @@ public class ForgeHammerCreation extends GenericCommandObject implements SubComm
         ForgeHammers.getInstance(),
         Material.DIAMOND_PICKAXE, hammer, false).defaultBuild();
     ItemStack itemStack = abstractItem.getItemStack();
-    HammerLike hammerLike = ToolFactory.createHammer(HammerType.TRADITIONAL, Tool.HAMMER);
+    HammerLike hammerLike = ToolFactory.createHammer(HammerType.TRADITIONAL, ToolType.HAMMER);
     hammerLike.setStrength(this.getToolMaterial(itemStack).getStrength());
     if(hammerLike instanceof Traditional traditional) {
       traditional.setRadius(1);

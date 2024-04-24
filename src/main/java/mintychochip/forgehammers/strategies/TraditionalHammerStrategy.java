@@ -19,14 +19,12 @@
 
 package mintychochip.forgehammers.strategies;
 
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import mintychochip.forgehammers.container.HammerLike;
+import mintychochip.forgehammers.container.Tool;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.util.Vector;
-import org.bukkit.entity.Player;
 
 public final class TraditionalHammerStrategy implements HammerStrategy {
 
@@ -37,22 +35,22 @@ public final class TraditionalHammerStrategy implements HammerStrategy {
   }
 
   public enum Cardinal {
-    UP_DOWN, EAST_WEST, NORTH_SOUTH
+    UP,DOWN,EAST,WEST,SOUTH,NORTH;
   }
 
   @Override
-  public void accept(Cardinal cardinal, Location origin, HammerLike hammerLike,
+  public void accept(Cardinal cardinal, Location origin, Tool tool,
       Consumer<Block> blockConsumer) {
-    if (!(hammerLike instanceof HammerLike.Traditional traditional)) {
+    if (!(tool instanceof HammerLike.Traditional traditional)) {
       return;
     }
     final int radius = traditional.getRadius();
     for (int offset = -radius; offset <= radius; offset++) {
       for (int j = -radius; j <= radius; j++) {
         final Vector v = switch (cardinal) {
-          case UP_DOWN -> new Vector(offset, 0, j);
-          case EAST_WEST -> new Vector(0, offset, j);
-          case NORTH_SOUTH -> new Vector(offset, j, 0);
+          case UP,DOWN -> new Vector(offset, 0, j);
+          case EAST, WEST -> new Vector(0, offset, j);
+          case NORTH,SOUTH -> new Vector(offset, j, 0);
         };
         blockConsumer.accept(origin.clone().add(v).getBlock());
       }

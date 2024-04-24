@@ -20,9 +20,8 @@
 package mintychochip.forgehammers.container;
 
 public class ToolFactory {
-
-  public static HammerLike createHammer(HammerType type, Tool whitelist) {
-    if(!(whitelist == Tool.SHOVEL || whitelist == Tool.HAMMER)) {
+  public static HammerLike createHammer(HammerType type, ToolType whitelist) {
+    if(!(whitelist == ToolType.SHOVEL || whitelist == ToolType.HAMMER)) {
       return null;
     }
     if(type == HammerType.TRADITIONAL) {

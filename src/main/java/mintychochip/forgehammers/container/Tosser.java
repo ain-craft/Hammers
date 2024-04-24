@@ -19,10 +19,19 @@
 
 package mintychochip.forgehammers.container;
 
+import com.google.gson.Gson;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataHolder;
+import org.bukkit.persistence.PersistentDataType;
 
-public interface Tosser<T extends PersistentDataHolder,V> {
+public interface Tosser<T extends PersistentDataHolder, V> extends Grabber<T, V> {
 
-  void toss (T container, V data, NamespacedKey key);
+  default void toss(T container, V data, NamespacedKey key) {
+    String json = new Gson().toJson(data);
+    if (json == null) {
+      return;
+    }
+    container.getPersistentDataContainer()
+        .set(key, PersistentDataType.STRING, new Gson().toJson(data));
+  }
 }

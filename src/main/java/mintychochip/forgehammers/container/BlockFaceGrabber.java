@@ -29,9 +29,12 @@ public interface BlockFaceGrabber {
   }
   private Cardinal getCardinalFromBlockFace(BlockFace blockFace) {
     return switch (blockFace) {
-      case UP, DOWN -> Cardinal.UP_DOWN;
-      case EAST, WEST -> Cardinal.EAST_WEST;
-      case NORTH, SOUTH -> Cardinal.NORTH_SOUTH;
+      case UP -> Cardinal.DOWN;
+      case DOWN -> Cardinal.UP;
+      case EAST -> Cardinal.WEST;
+      case WEST -> Cardinal.EAST;
+      case NORTH -> Cardinal.NORTH;
+      case SOUTH -> Cardinal.SOUTH;
       default -> null;
     };
   }

@@ -19,43 +19,35 @@
 
 package mintychochip.forgehammers.commands;
 
-import java.util.Set;
 import mintychochip.forgehammers.Constants;
 import mintychochip.forgehammers.container.Grasper;
-import mintychochip.forgehammers.container.gem.Gem;
 import mintychochip.forgehammers.container.gem.GemContainer;
-import mintychochip.forgehammers.container.gem.strategies.GemStrategySelector;
-import mintychochip.genesis.commands.abstraction.GenericCommand;
+import mintychochip.genesis.commands.abstraction.GenericCommandObject;
 import mintychochip.genesis.commands.abstraction.SubCommand;
-import org.bukkit.NamespacedKey;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class SetGem extends GenericCommand implements SubCommand, GemStrategySelector {
+public class ToolInfo extends GenericCommandObject implements SubCommand {
 
-  private final Grasper<ItemMeta, GemContainer> gemGrasper = new Grasper<>() {
-  };
-
-  public SetGem(String executor, String description, Set<String> strings) {
-    super(executor, description, strings);
+  Grasper<ItemMeta, GemContainer> containerGrasper = new Grasper<>(){};
+  public ToolInfo(String executor, String description) {
+    super(executor, description);
   }
 
   @Override
   public boolean execute(String[] strings, Player player) {
-    if (strings.length < depth) {
-      return false;
-    }
-    ItemStack itemInMainHand = player.getInventory().getItemInMainHand();
-    ItemMeta itemMeta = itemInMainHand.getItemMeta();
-    GemContainer grab = gemGrasper.grab(itemMeta, Constants.GEM_CONTAINER, GemContainer.class);
-    if (grab == null) {
-      grab = new GemContainer();
-    }
 
-    grab.add(Gem.getGem(strings[depth - 1]));
-    gemGrasper.toss(itemMeta, grab, Constants.GEM_CONTAINER);
-    itemInMainHand.setItemMeta(itemMeta);
+    PlayerInventory inventory = player.getInventory();
+    ItemStack itemInMainHand = inventory.getItemInMainHand();
+    ItemMeta itemMeta = itemInMainHand.getItemMeta();
+    GemContainer grab = containerGrasper.grab(itemMeta, Constants.GEM_CONTAINER, GemContainer.class);
+    grab.keySet().stream().forEach(gem -> {
+      Bukkit.broadcast(Component.text(gem + " " + grab.getLevel(gem)));
+    });
     return true;
   }
 }

@@ -19,8 +19,9 @@
 
 package mintychochip.forgehammers.container;
 
+import mintychochip.genesis.items.interfaces.Embeddable;
 import org.bukkit.persistence.PersistentDataHolder;
 
-public interface Grasper<T extends PersistentDataHolder, V> extends Grabber<T,V>,Tosser<T,V> {
+public interface Grasper<T extends PersistentDataHolder, V extends Embeddable> extends Grabber<T,V>,Tosser<T,V> {
 
 }

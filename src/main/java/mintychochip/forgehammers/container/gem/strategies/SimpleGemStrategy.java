@@ -21,11 +21,13 @@ package mintychochip.forgehammers.container.gem.strategies;
 
 import java.util.Random;
 import mintychochip.forgehammers.container.gem.Gem;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 
 public class SimpleGemStrategy implements GemStrategy {
 
   @Override
   public int create(Gem gem) {
-    return new Random().nextInt(gem.getMax() - gem.getMin()) + gem.getMin();
+    return new Random().nextInt(gem.getMax() - gem.getMin() + 1) + gem.getMin();
   }
 }

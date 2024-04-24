@@ -21,7 +21,6 @@ package mintychochip.forgehammers.config;
 
 import mintychochip.genesis.config.abstraction.GenericConfig;
 import mintychochip.genesis.config.abstraction.GenesisConfigurationSection;
-import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class HammerConfig extends GenericConfig {

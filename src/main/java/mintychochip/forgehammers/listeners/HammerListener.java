@@ -20,23 +20,17 @@
 package mintychochip.forgehammers.listeners;
 
 import mintychochip.forgehammers.AbstractListener;
-import mintychochip.forgehammers.Constants;
 import mintychochip.forgehammers.Grasper;
 import mintychochip.forgehammers.container.BlockFaceGrabber;
 import mintychochip.forgehammers.container.ForgeHammers;
 import mintychochip.forgehammers.container.HammerLike;
-import mintychochip.forgehammers.container.gem.GemContainer;
-import mintychochip.forgehammers.container.gem.GemGrasper;
-import mintychochip.forgehammers.events.HammerBreakEvent;
-import mintychochip.forgehammers.events.HammerPreBreakEvent;
-import mintychochip.forgehammers.events.PreBlockDropEvent;
+import mintychochip.forgehammers.container.MaterialConverter;
+import mintychochip.forgehammers.events.FakeBlockDropItemEvent;
+import mintychochip.forgehammers.events.ToolBreakEvent;
 import mintychochip.forgehammers.strategies.HammerStrategySelector;
-import mintychochip.forgehammers.strategies.StrategySelector;
 import mintychochip.forgehammers.strategies.TraditionalHammerStrategy.Cardinal;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -45,61 +39,61 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 public class HammerListener extends AbstractListener implements HammerStrategySelector,
-    BlockFaceGrabber {
+    BlockFaceGrabber, MaterialConverter {
 
   private final ForgeHammers instance;
-
-  private final GemGrasper gemGrasper;
   private final Grasper grasper;
 
-
-  public HammerListener(ForgeHammers instance, Grasper grasper, GemGrasper gemGrasper) {
+  public HammerListener(ForgeHammers instance, Grasper grasper) {
     super(instance);
     this.instance = instance;
-    this.gemGrasper = gemGrasper;
     this.grasper = grasper;
   }
 
   @EventHandler(priority = EventPriority.MONITOR)
-  private void hammerBreakBlocks(final BlockBreakEvent event) {
-    Player player = event.getPlayer();
-    PlayerInventory inventory = player.getInventory();
-    ItemStack item = grasper.getItemInUse(inventory.getItemInMainHand(),
-        inventory.getItemInOffHand());
-    if (item.getType() == Material.AIR) {
+  private void onBreak(final BlockBreakEvent event) {
+    if (event instanceof ToolBreakEvent) {
       return;
     }
-    HammerLike grab = grasper.grab(item);
+    Block origin = event.getBlock();
+    if (origin.getType().isAir()) {
+      return;
+    }
+    Player player = event.getPlayer();
+    ItemStack itemInUse = this.getItemInUse(player.getInventory());
+    if (itemInUse.getType().isAir()) {
+      return;
+    }
+    HammerLike grab = grasper.grab(itemInUse);
     if (grab == null) {
       return;
     }
     Cardinal cardinal = this.getCardinal(player);
-    if (cardinal == null) {
-      return;
-    }
-    GemContainer gemContainer = gemGrasper.grab(item.getItemMeta(), Constants.GEM_CONTAINER);
-    event.setDropItems(false);
-    final Block origin = event.getBlock();
-    final float hardness = origin.getType().getHardness();
-    Bukkit.getPluginManager().callEvent(
-        new PreBlockDropEvent(origin.getLocation(), origin.getDrops(), grab, gemContainer
-            , event.getPlayer()));
-    if (!grab.blockWhitelisted(origin)) {
-      return;
-    }
     this.selectStrategy(grab).accept(cardinal, origin.getLocation(),
         grab, block -> {
           if (!block.equals(origin)) {
-            Bukkit.getPluginManager()
-                .callEvent(new HammerPreBreakEvent(block, cardinal, player, grab, item,
-                    hardness, drops -> {
-                  Bukkit.getPluginManager()
-                      .callEvent(
-                          new PreBlockDropEvent(block.getLocation(), drops, grab, gemContainer,
-                              player));
-                }));
+            Bukkit.getPluginManager().callEvent(new ToolBreakEvent(block, player, itemInUse, grab));
           }
         });
   }
+  @EventHandler
+  private void onBreakMiddle(final BlockBreakEvent event) {
+    if(event instanceof ToolBreakEvent) {
+      return;
+    }
+    Player player = event.getPlayer();
+    ItemStack itemInUse = this.getItemInUse(player.getInventory());
+    if(itemInUse.getType().isAir()) {
+      return;
+    }
+    event.setDropItems(false);
+    Bukkit.getPluginManager().callEvent(new FakeBlockDropItemEvent(player,event.getBlock().getLocation(),this.drops(itemInUse,event.getBlock()),itemInUse));
+  }
+  private ItemStack getItemInUse(PlayerInventory inventory) {
+    return this.getItemInUse(inventory.getItemInMainHand(), inventory.getItemInOffHand());
+  }
 
+  private ItemStack getItemInUse(ItemStack main, ItemStack off) {
+    return main.getType().isAir() ? off : main;
+  }
 }

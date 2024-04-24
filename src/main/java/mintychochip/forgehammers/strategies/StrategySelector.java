@@ -19,9 +19,6 @@
 
 package mintychochip.forgehammers.strategies;
 
-import mintychochip.forgehammers.container.HammerLike;
-import mintychochip.forgehammers.container.HammerLike.Traditional;
-
 public interface StrategySelector<T,V> {
   T selectStrategy(V v);
 }
