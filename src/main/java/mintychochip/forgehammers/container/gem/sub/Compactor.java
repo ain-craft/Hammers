@@ -20,19 +20,18 @@
 package mintychochip.forgehammers.container.gem.sub;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import mintychochip.forgehammers.container.ItemMerger;
 import mintychochip.forgehammers.container.gem.Gem;
 import mintychochip.forgehammers.container.gem.GemAnno;
 import mintychochip.forgehammers.container.gem.GemAnno.ExecutionPriority;
 import mintychochip.forgehammers.container.gem.GemEnum;
 import mintychochip.forgehammers.container.gem.sub.triggers.ITriggerOnDrop;
 import mintychochip.forgehammers.events.DropEvent;
-import mintychochip.forgehammers.events.MergeEvent;
 import mintychochip.genesis.util.Rarity;
-import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -44,12 +43,21 @@ public class Compactor extends Gem implements ITriggerOnDrop {
     super(gemEnum, name, description, min, max, rarity);
     compactionMap.put(Material.GOLD_NUGGET, new CompactionEntry(9, Material.GOLD_INGOT));
     compactionMap.put(Material.GOLD_INGOT, new CompactionEntry(9, Material.GOLD_BLOCK));
+    compactionMap.put(Material.IRON_INGOT, new CompactionEntry(9, Material.IRON_BLOCK));
   }
   @GemAnno(priority = ExecutionPriority.NORMAL)
   @Override
   public void execute(DropEvent event, int level) {
+    Collection<ItemStack> drops = event.getDrops();
+    for(int i = 0; i < level; i++) {
+      drops =ItemMerger.merge(this.compact(drops));
+    }
+    event.setDrops(drops);
+  }
+
+  private Collection<ItemStack> compact(Collection<ItemStack> drops) {
     List<ItemStack> newDrops = new ArrayList<>();
-    for (ItemStack drop : event.getDrops()) {
+    for (ItemStack drop : drops) {
       if(compactionMap.containsKey(drop.getType())) {
         CompactionEntry compactionEntry = compactionMap.get(drop.getType());
         int amount = compactionEntry.amount(drop.getAmount());
@@ -64,7 +72,7 @@ public class Compactor extends Gem implements ITriggerOnDrop {
         newDrops.add(drop);
       }
     }
-    event.setDrops(newDrops);
+    return newDrops;
   }
   static class CompactionEntry {
     private final int amount;

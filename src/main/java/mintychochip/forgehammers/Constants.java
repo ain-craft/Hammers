@@ -30,6 +30,7 @@ public class Constants {
 
   public static final NamespacedKey SAW_KEY = new NamespacedKey(ForgeHammers.getInstance(),"saw");
   public static final NamespacedKey GEM_CONTAINER = new NamespacedKey(ForgeHammers.getInstance(),"gems");
+  public static final NamespacedKey GEM = new NamespacedKey(ForgeHammers.getInstance(),"gem");
   public static final NamespacedKey HAMMER_KEY = new NamespacedKey(ForgeHammers.getInstance(),
       "hammer");
   public static final List<Material> ORE_MATERIALS = Arrays.stream(Material.values()).filter(

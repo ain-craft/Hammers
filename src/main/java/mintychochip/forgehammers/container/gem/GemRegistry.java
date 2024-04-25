@@ -48,7 +48,7 @@ public class GemRegistry implements Registry<Gem> {
     this.register(
         new VeinMiner(GemEnum.VEIN_MINER, "Vein", "asd", 1, 3, Rarity.COMMON));
     this.register(
-        new Compactor(GemEnum.COMPACTOR, "compactor", "asd", 1, 3, Rarity.COMMON)
+        new Compactor(GemEnum.COMPACTOR, "compactor", "asd", 1, 5, Rarity.COMMON)
     );
   }
 

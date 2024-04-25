@@ -26,13 +26,12 @@ import mintychochip.forgehammers.Grasper;
 import mintychochip.forgehammers.container.BlockFaceGrabber;
 import mintychochip.forgehammers.container.ForgeHammers;
 import mintychochip.forgehammers.container.HammerLike;
-import mintychochip.forgehammers.container.ItemLocationKey;
+import mintychochip.forgehammers.container.ItemMerger;
 import mintychochip.forgehammers.container.MaterialConverter;
 import mintychochip.forgehammers.container.SynchronizedItemDrops;
 import mintychochip.forgehammers.events.CreateItemEvent;
 import mintychochip.forgehammers.events.DropEvent;
 import mintychochip.forgehammers.events.FakeBreakEvent;
-import mintychochip.forgehammers.events.MergeEvent;
 import mintychochip.forgehammers.events.ToolBreakEvent;
 import mintychochip.forgehammers.strategies.HammerStrategySelector;
 import mintychochip.forgehammers.strategies.TraditionalHammerStrategy.Cardinal;
@@ -98,11 +97,8 @@ public class HammerListener extends AbstractListener implements HammerStrategySe
         .remove(location);
     for (ItemStack itemStack : map.keySet()) {
       Collection<ItemStack> stacks = map.remove(itemStack);
-      Bukkit.getPluginManager().callEvent(new MergeEvent(location,stacks,drops -> {
-        DropEvent dropEvent = new DropEvent(location, drops, itemStack);
-        dropEvent.setInventory(event.getPlayer().getInventory());
-        Bukkit.getPluginManager().callEvent(dropEvent);
-      }));
+        Bukkit.getPluginManager().callEvent(new DropEvent(location, ItemMerger.merge(stacks), itemStack, event.getPlayer()
+            .getInventory()));
     }
   }
   @EventHandler(priority = EventPriority.HIGH)

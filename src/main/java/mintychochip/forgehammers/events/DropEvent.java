@@ -27,15 +27,16 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.entity.Player;
 public class DropEvent extends AbstractEvent {
   private final ItemStack itemStack;
-  private Collection<ItemStack> drops;
   private final Location location;
-  private Inventory inventory = null;
+  private Collection<ItemStack> drops;
+  private Inventory inventory;
 
-  private boolean drop = false;
-  public DropEvent(Location location, Collection<ItemStack> drops, ItemStack itemStack) {
+  private boolean drop = true;
+  public DropEvent(Location location, Collection<ItemStack> drops, ItemStack itemStack, Inventory inventory) {
     this.location = location;
     this.drops = drops;
     this.itemStack = itemStack;
+    this.inventory = inventory;
   }
 
   public void setDrop(boolean drop) {

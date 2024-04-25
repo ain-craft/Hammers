@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 import mintychochip.forgehammers.container.gem.GemAnno;
 import mintychochip.forgehammers.container.gem.GemAnno.ExecutionPriority;
 import mintychochip.forgehammers.events.DropEvent;
-import mintychochip.forgehammers.events.MergeEvent;
 
 public interface ITriggerOnDrop {
   void execute(DropEvent event, int level);
