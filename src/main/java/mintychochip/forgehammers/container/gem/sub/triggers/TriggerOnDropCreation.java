@@ -22,14 +22,14 @@ package mintychochip.forgehammers.container.gem.sub.triggers;
 import java.lang.reflect.Method;
 import mintychochip.forgehammers.container.gem.GemAnno;
 import mintychochip.forgehammers.container.gem.GemAnno.ExecutionPriority;
-import mintychochip.forgehammers.events.FakeBlockDropItemEvent;
+import mintychochip.forgehammers.events.CreateItemEvent;
 
-public interface TriggerOnBlockDrop {
-  void execute(FakeBlockDropItemEvent event, int level);
+public interface TriggerOnDropCreation {
+  void execute(CreateItemEvent event, int level);
 
   default ExecutionPriority getPrio() {
     try {
-      Method method = this.getClass().getMethod("execute",FakeBlockDropItemEvent.class, int.class);
+      Method method = this.getClass().getMethod("execute", CreateItemEvent.class, int.class);
       return this.getPriority(method);
     } catch (NoSuchMethodException e) {
       throw new RuntimeException(e);

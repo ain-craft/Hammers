@@ -24,12 +24,12 @@ import mintychochip.forgehammers.container.gem.Gem;
 import mintychochip.forgehammers.container.gem.GemAnno;
 import mintychochip.forgehammers.container.gem.GemAnno.ExecutionPriority;
 import mintychochip.forgehammers.container.gem.GemEnum;
-import mintychochip.forgehammers.container.gem.sub.triggers.TriggerOnBlockDrop;
-import mintychochip.forgehammers.events.FakeBlockDropItemEvent;
+import mintychochip.forgehammers.container.gem.sub.triggers.TriggerOnDropCreation;
+import mintychochip.forgehammers.events.CreateItemEvent;
 import mintychochip.genesis.util.Rarity;
 import org.bukkit.Material;
 
-public class GoldDigger extends Gem implements TriggerOnBlockDrop, Fortune {
+public class GoldDigger extends Gem implements TriggerOnDropCreation, Fortune {
 
   public GoldDigger(GemEnum gemEnum, String name,
       String description, int min, int max, Rarity rarity) {
@@ -38,7 +38,7 @@ public class GoldDigger extends Gem implements TriggerOnBlockDrop, Fortune {
 
   @Override
   @GemAnno(priority = ExecutionPriority.HIGH)
-  public void execute(FakeBlockDropItemEvent event, int level) {
+  public void execute(CreateItemEvent event, int level) {
     event.setDrops(event.getDrops().stream().peek(drop -> {
       if (drop.getType() == Material.GOLD_NUGGET) {
         double amount = (double) drop.getAmount() * this.multiplier(level);

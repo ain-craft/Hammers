@@ -17,24 +17,11 @@
  *
  */
 
-package mintychochip.forgehammers.events;
+package mintychochip.forgehammers.container;
 
-import java.util.Collection;
-import java.util.function.Consumer;
-import mintychochip.forgehammers.container.Tool;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
-public class ToolBreakEvent extends FakeBreakEvent {
-  private final Tool tool;
-  public ToolBreakEvent(@NotNull Block block, @NotNull Player player, ItemStack item, Tool tool, Consumer<Collection<ItemStack>> drops) {
-    super(block, player, item,drops);
-    this.tool = tool;
-  }
-  public Tool getTool() {
-    return tool;
-  }
+public record ItemLocationKey (Location location, ItemStack itemStack) {
+
 }

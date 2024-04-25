@@ -26,29 +26,23 @@ import mintychochip.forgehammers.container.gem.Gem;
 import mintychochip.forgehammers.container.gem.GemAnno;
 import mintychochip.forgehammers.container.gem.GemAnno.ExecutionPriority;
 import mintychochip.forgehammers.container.gem.GemEnum;
-import mintychochip.forgehammers.container.gem.sub.triggers.TriggerOnBlockDrop;
-import mintychochip.forgehammers.events.FakeBlockDropItemEvent;
+import mintychochip.forgehammers.container.gem.sub.triggers.ITriggerOnDrop;
+import mintychochip.forgehammers.container.gem.sub.triggers.TriggerOnDropCreation;
+import mintychochip.forgehammers.events.CreateItemEvent;
+import mintychochip.forgehammers.events.DropEvent;
 import mintychochip.genesis.util.Rarity;
 import org.bukkit.inventory.ItemStack;
 
-public class Magnetic extends Gem implements TriggerOnBlockDrop {
+public class Magnetic extends Gem implements ITriggerOnDrop {
 
   public Magnetic(GemEnum gemEnum, String name,
       String description, int min, int max, Rarity rarity) {
     super(gemEnum, name, description, min, max, rarity);
   }
+  @GemAnno(priority = ExecutionPriority.MONITOR)
 
   @Override
-  @GemAnno(priority = ExecutionPriority.MONITOR)
-  public void execute(FakeBlockDropItemEvent event, int level) {
-    List<ItemStack> remaining = new ArrayList<>();
-    for (ItemStack drop : event.getDrops()) {
-      HashMap<Integer, ItemStack> integerItemStackHashMap = event.getPlayer().getInventory()
-          .addItem(drop);
-      if (!integerItemStackHashMap.isEmpty()) {
-        remaining.add(drop);
-      }
-    }
-    event.setDrops(remaining);
+  public void execute(DropEvent event, int level) {
+    event.setDrop(false);
   }
 }

@@ -22,35 +22,51 @@ package mintychochip.forgehammers.events;
 import java.util.Collection;
 import mintychochip.genesis.events.AbstractEvent;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-
-public class FakeBlockDropItemEvent extends AbstractEvent {
-  private final Player player;
-  private final Location location;
-  private final ItemStack item;
+import org.bukkit.entity.Player;
+public class DropEvent extends AbstractEvent {
+  private final ItemStack itemStack;
   private Collection<ItemStack> drops;
-  public FakeBlockDropItemEvent(Player player, Location location, Collection<ItemStack> drops, ItemStack item) {
-    this.player = player;
+  private final Location location;
+  private Inventory inventory = null;
+
+  private boolean drop = false;
+  public DropEvent(Location location, Collection<ItemStack> drops, ItemStack itemStack) {
     this.location = location;
     this.drops = drops;
-    this.item = item;
+    this.itemStack = itemStack;
   }
-  public ItemStack getItem() {
-    return item;
+
+  public void setDrop(boolean drop) {
+    this.drop = drop;
   }
+
+  public boolean isDrop() {
+    return drop;
+  }
+
+  public void setInventory(Inventory inventory) {
+    this.inventory = inventory;
+  }
+
+  public Inventory getInventory() {
+    return inventory;
+  }
+
   public void setDrops(Collection<ItemStack> drops) {
     this.drops = drops;
   }
-  public Player getPlayer() {
-    return player;
-  }
 
-  public Location getLocation() {
-    return location;
+  public ItemStack getItemStack() {
+    return itemStack;
   }
 
   public Collection<ItemStack> getDrops() {
     return drops;
+  }
+
+  public Location getLocation() {
+    return location;
   }
 }

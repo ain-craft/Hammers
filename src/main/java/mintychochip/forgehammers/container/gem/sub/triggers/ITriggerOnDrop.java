@@ -22,14 +22,14 @@ package mintychochip.forgehammers.container.gem.sub.triggers;
 import java.lang.reflect.Method;
 import mintychochip.forgehammers.container.gem.GemAnno;
 import mintychochip.forgehammers.container.gem.GemAnno.ExecutionPriority;
-import org.bukkit.event.block.BlockBreakEvent;
+import mintychochip.forgehammers.events.DropEvent;
+import mintychochip.forgehammers.events.MergeEvent;
 
-public interface TriggerOnBreakEvent {
-
-  void execute(BlockBreakEvent event, int level);
+public interface ITriggerOnDrop {
+  void execute(DropEvent event, int level);
   default ExecutionPriority getPrio() {
     try {
-      Method method = this.getClass().getMethod("execute", BlockBreakEvent.class, int.class);
+      Method method = this.getClass().getMethod("execute", DropEvent.class, int.class);
       return this.getPriority(method);
     } catch (NoSuchMethodException e) {
       throw new RuntimeException(e);
@@ -43,5 +43,4 @@ public interface TriggerOnBreakEvent {
     // Default priority if the method is not annotated with GemAnno
     return ExecutionPriority.LOW;
   }
-
 }

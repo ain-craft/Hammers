@@ -26,24 +26,23 @@ import mintychochip.forgehammers.container.Grasper;
 import mintychochip.forgehammers.container.gem.Gem;
 import mintychochip.forgehammers.container.gem.GemAnno.ExecutionPriority;
 import mintychochip.forgehammers.container.gem.GemContainer;
-import mintychochip.forgehammers.container.gem.sub.triggers.TriggerOnBlockDrop;
-import mintychochip.forgehammers.events.FakeBlockDropItemEvent;
+import mintychochip.forgehammers.container.gem.sub.triggers.TriggerOnDropCreation;
+import mintychochip.forgehammers.events.CreateItemEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class BlockDropListener extends AbstractListener {
+public class GemCreationListener extends AbstractListener {
 
   private final Grasper<ItemMeta,GemContainer> grasper = new Grasper<>() {
   };
-  public BlockDropListener(ForgeHammers instance) {
+  public GemCreationListener(ForgeHammers instance) {
     super(instance);
   }
 
   @EventHandler(priority = EventPriority.HIGH)
-  private void onBlockDropEvent(final FakeBlockDropItemEvent event) {
+  private void onBlockDropEvent(final CreateItemEvent event) {
     ItemStack tool = event.getItem();
     GemContainer grab = grasper.grab(tool.getItemMeta(), Constants.GEM_CONTAINER, GemContainer.class);
     if(grab == null) {
@@ -51,9 +50,10 @@ public class BlockDropListener extends AbstractListener {
     }
     for (ExecutionPriority value : ExecutionPriority.values()) {
       grab.keySet().stream().map(gem -> Gem.getGem(gem.getNamespace()))
-          .filter(gem -> gem instanceof TriggerOnBlockDrop).map(gem -> (TriggerOnBlockDrop) gem)
+          .filter(gem -> gem instanceof TriggerOnDropCreation).map(gem -> (TriggerOnDropCreation) gem)
           .filter(triggerOnBlockDrop -> triggerOnBlockDrop.getPrio() == value)
-          .forEach(triggerOnBlockDrop -> triggerOnBlockDrop.execute(event,grab.getLevel(((Gem) triggerOnBlockDrop).getGemEnum())));
+          .forEach(triggerOnBlockDrop -> triggerOnBlockDrop.execute(event,
+              grab.getLevel(((Gem) triggerOnBlockDrop).getGemEnum())));
     }
   }
 }

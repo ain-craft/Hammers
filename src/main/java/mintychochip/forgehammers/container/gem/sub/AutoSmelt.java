@@ -27,15 +27,15 @@ import mintychochip.forgehammers.container.gem.Gem;
 import mintychochip.forgehammers.container.gem.GemAnno;
 import mintychochip.forgehammers.container.gem.GemAnno.ExecutionPriority;
 import mintychochip.forgehammers.container.gem.GemEnum;
-import mintychochip.forgehammers.container.gem.sub.triggers.TriggerOnBlockDrop;
-import mintychochip.forgehammers.events.FakeBlockDropItemEvent;
+import mintychochip.forgehammers.container.gem.sub.triggers.TriggerOnDropCreation;
+import mintychochip.forgehammers.events.CreateItemEvent;
 import mintychochip.genesis.util.Rarity;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.inventory.ItemStack;
 
-public class AutoSmelt extends Gem implements TriggerOnBlockDrop {
+public class AutoSmelt extends Gem implements TriggerOnDropCreation {
 
   private Map<Material, Material> smeltables = new HashMap<>();
 
@@ -47,14 +47,14 @@ public class AutoSmelt extends Gem implements TriggerOnBlockDrop {
     smeltables.put(Material.RAW_COPPER, Material.COPPER_INGOT);
     smeltables.put(Material.COBBLED_DEEPSLATE,Material.DEEPSLATE);
     smeltables.put(Material.COBBLESTONE,Material.STONE);
-    smeltables.put(Material.NETHERRACK,Material.NETHERRACK);
+    smeltables.put(Material.NETHERRACK,Material.NETHER_BRICK);
     smeltables.put(Material.SAND,Material.GLASS);
     smeltables.put(Material.BIRCH_LOG,Material.CHARCOAL);
   }
 
   @Override
   @GemAnno(priority = ExecutionPriority.LOW)
-  public void execute(FakeBlockDropItemEvent event, int level) {
+  public void execute(CreateItemEvent event, int level) {
     boolean smelted = false;
     List<ItemStack> smeltedDrops = new ArrayList<>();
     for (ItemStack drop : event.getDrops()) {
@@ -69,7 +69,7 @@ public class AutoSmelt extends Gem implements TriggerOnBlockDrop {
 
     if (smelted) {
       Location blockLocation = event.getLocation();
-      blockLocation.getWorld().spawnParticle(Particle.LAVA, blockLocation, 1, 0, 0, 0, 5);
+      blockLocation.getWorld().spawnParticle(Particle.LAVA, blockLocation.add(0.5,0.5,0.5), 1, 0, 0, 0, 5);
     }
   }
   private boolean smeltable(Material material) {

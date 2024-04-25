@@ -19,17 +19,25 @@
 
 package mintychochip.forgehammers.listeners;
 
+import java.util.Collection;
+import java.util.Map;
 import mintychochip.forgehammers.AbstractListener;
 import mintychochip.forgehammers.Grasper;
 import mintychochip.forgehammers.container.BlockFaceGrabber;
 import mintychochip.forgehammers.container.ForgeHammers;
 import mintychochip.forgehammers.container.HammerLike;
+import mintychochip.forgehammers.container.ItemLocationKey;
 import mintychochip.forgehammers.container.MaterialConverter;
-import mintychochip.forgehammers.events.FakeBlockDropItemEvent;
+import mintychochip.forgehammers.container.SynchronizedItemDrops;
+import mintychochip.forgehammers.events.CreateItemEvent;
+import mintychochip.forgehammers.events.DropEvent;
+import mintychochip.forgehammers.events.FakeBreakEvent;
+import mintychochip.forgehammers.events.MergeEvent;
 import mintychochip.forgehammers.events.ToolBreakEvent;
 import mintychochip.forgehammers.strategies.HammerStrategySelector;
 import mintychochip.forgehammers.strategies.TraditionalHammerStrategy.Cardinal;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -50,9 +58,9 @@ public class HammerListener extends AbstractListener implements HammerStrategySe
     this.grasper = grasper;
   }
 
-  @EventHandler(priority = EventPriority.MONITOR)
+  @EventHandler(priority = EventPriority.HIGH)
   private void onBreak(final BlockBreakEvent event) {
-    if (event instanceof ToolBreakEvent) {
+    if (event instanceof FakeBreakEvent) {
       return;
     }
     Block origin = event.getBlock();
@@ -72,23 +80,52 @@ public class HammerListener extends AbstractListener implements HammerStrategySe
     this.selectStrategy(grab).accept(cardinal, origin.getLocation(),
         grab, block -> {
           if (!block.equals(origin)) {
-            Bukkit.getPluginManager().callEvent(new ToolBreakEvent(block, player, itemInUse, grab));
+            Bukkit.getPluginManager().callEvent(new ToolBreakEvent(block, player, itemInUse, grab,
+                stacks -> {
+                  SynchronizedItemDrops.INSTANCE.addEntry(origin.getLocation(), stacks, itemInUse);
+                }));
           }
         });
   }
-  @EventHandler
-  private void onBreakMiddle(final BlockBreakEvent event) {
-    if(event instanceof ToolBreakEvent) {
+
+  @EventHandler(priority = EventPriority.MONITOR)
+  private void asdasd(final BlockBreakEvent event) {
+    if(event instanceof FakeBreakEvent) {
+      return;
+    }
+    final Location location = event.getBlock().getLocation();
+    Map<ItemStack, Collection<ItemStack>> map = SynchronizedItemDrops.INSTANCE.getItemStacks()
+        .remove(location);
+    for (ItemStack itemStack : map.keySet()) {
+      Collection<ItemStack> stacks = map.remove(itemStack);
+      Bukkit.getPluginManager().callEvent(new MergeEvent(location,stacks,drops -> {
+        DropEvent dropEvent = new DropEvent(location, drops, itemStack);
+        dropEvent.setInventory(event.getPlayer().getInventory());
+        Bukkit.getPluginManager().callEvent(dropEvent);
+      }));
+    }
+  }
+  @EventHandler(priority = EventPriority.HIGH)
+  private void breaasd(final BlockBreakEvent event) {
+    if (event instanceof FakeBreakEvent) {
+      return;
+    }
+    Block origin = event.getBlock();
+    if (origin.getType().isAir()) {
       return;
     }
     Player player = event.getPlayer();
     ItemStack itemInUse = this.getItemInUse(player.getInventory());
-    if(itemInUse.getType().isAir()) {
+    if (itemInUse.getType().isAir()) {
       return;
     }
-    event.setDropItems(false);
-    Bukkit.getPluginManager().callEvent(new FakeBlockDropItemEvent(player,event.getBlock().getLocation(),this.drops(itemInUse,event.getBlock()),itemInUse));
+    Bukkit.getPluginManager().callEvent(
+        new CreateItemEvent(player, origin.getLocation(), this.drops(itemInUse, origin), itemInUse,
+            stacks -> {
+              SynchronizedItemDrops.INSTANCE.addEntry(origin.getLocation(), stacks, itemInUse);
+            }));
   }
+
   private ItemStack getItemInUse(PlayerInventory inventory) {
     return this.getItemInUse(inventory.getItemInMainHand(), inventory.getItemInOffHand());
   }

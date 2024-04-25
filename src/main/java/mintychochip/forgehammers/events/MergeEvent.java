@@ -19,40 +19,32 @@
 
 package mintychochip.forgehammers.events;
 
+import java.util.Collection;
+import java.util.function.Consumer;
 import mintychochip.genesis.events.AbstractEvent;
 import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
 
-public class ParticleBlockEvent extends AbstractEvent implements BlockEvent {
-
-  private final Particle particle;
+public class MergeEvent extends AbstractEvent {
 
   private final Location location;
+  private final Collection<ItemStack> drops;
 
-  private final int count;
-
-  private final double xOffset;
-
-  private final double yOffset;
-
-  private final double zOffset;
-
-  private final double speed;
-
-  public ParticleBlockEvent(Particle particle, Location location, int count, double xOffset,
-      double yOffset, double zOffset, double speed) {
-    this.particle = particle;
-    this.location = location;
-    this.count = count;
-    this.xOffset = xOffset;
-    this.yOffset = yOffset;
-    this.zOffset = zOffset;
-    this.speed = speed;
+  private final Consumer<Collection<ItemStack>> itemStackConsumer;
+  public MergeEvent(Location location, Collection<ItemStack> drops, Consumer<Collection<ItemStack>> itemStackConsumer) {
+    this.location=  location;
+    this.drops = drops;
+    this.itemStackConsumer = itemStackConsumer;
   }
 
-  @Override
-  public Block getBlock() {
-    return location.getBlock();
+  public void accept(Collection<ItemStack> drops) {
+    itemStackConsumer.accept(drops);
+  }
+  public Location getLocation() {
+    return location;
+  }
+
+  public Collection<ItemStack> getDrops() {
+    return drops;
   }
 }

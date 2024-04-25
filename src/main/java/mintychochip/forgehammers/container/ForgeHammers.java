@@ -31,8 +31,10 @@ import mintychochip.forgehammers.commands.ToolInfo;
 import mintychochip.forgehammers.config.HammerConfig;
 import mintychochip.forgehammers.container.gem.GemEnum;
 import mintychochip.forgehammers.container.gem.sub.listeners.BlockBreakEventListener;
-import mintychochip.forgehammers.container.gem.sub.listeners.BlockDropListener;
+import mintychochip.forgehammers.container.gem.sub.listeners.DropListener;
+import mintychochip.forgehammers.container.gem.sub.listeners.GemCreationListener;
 import mintychochip.forgehammers.listeners.HammerListener;
+import mintychochip.forgehammers.listeners.ItemStreamListener;
 import mintychochip.forgehammers.listeners.ToolBreakListener;
 import mintychochip.forgehammers.typeadapter.RuntimeTypeAdapterFactory;
 import mintychochip.genesis.commands.abstraction.GenericMainCommandManager;
@@ -59,7 +61,7 @@ public final class ForgeHammers extends JavaPlugin {
     NamespacedKey hammerKey = new NamespacedKey(this, "hammer");
     GrasperImpl grasper = new GrasperImpl(hammerFactory, hammerKey);
     List<Listener> listeners = Arrays.asList(
-        new HammerListener(this, grasper), new BlockDropListener(this), new ToolBreakListener(this), new BlockBreakEventListener(this));
+        new HammerListener(this, grasper), new GemCreationListener(this), new DropListener(this), new ToolBreakListener(this), new BlockBreakEventListener(this), new ItemStreamListener(this));
     HammerConfig hammerConfig = new HammerConfig("hammer.yml", this);
     GenericMainCommandManager genericMainCommandManager1 = new GenericMainCommandManager("gems",
         "asd");

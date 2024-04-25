@@ -26,45 +26,37 @@ import mintychochip.forgehammers.container.Grasper;
 import mintychochip.forgehammers.container.gem.Gem;
 import mintychochip.forgehammers.container.gem.GemAnno.ExecutionPriority;
 import mintychochip.forgehammers.container.gem.GemContainer;
-import mintychochip.forgehammers.container.gem.sub.triggers.TriggerOnBreakEvent;
-import org.bukkit.entity.Player;
+import mintychochip.forgehammers.container.gem.sub.triggers.ITriggerOnDrop;
+import mintychochip.forgehammers.container.gem.sub.triggers.TriggerOnDropCreation;
+import mintychochip.forgehammers.events.DropEvent;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class BlockBreakEventListener extends AbstractListener {
+public class DropListener extends AbstractListener {
 
-  public BlockBreakEventListener(ForgeHammers instance) {
+  public DropListener(ForgeHammers instance) {
     super(instance);
   }
 
-  @EventHandler
-  private void onBreak(BlockBreakEvent event) {
-    Player player = event.getPlayer();
-    ItemStack itemInUse = this.getItemInUse(player.getInventory());
+  private final Grasper<ItemMeta, GemContainer> grasper = new Grasper<>() {
+  };
 
-    final Grasper<ItemMeta, GemContainer> grasper = new Grasper<>() {
-    };
-    GemContainer grab = grasper.grab(itemInUse.getItemMeta(), Constants.GEM_CONTAINER,
+  @EventHandler(priority = EventPriority.HIGH)
+  private void onDropEvent(final DropEvent event) {
+    ItemStack itemStack = event.getItemStack();
+    GemContainer grab = grasper.grab(itemStack.getItemMeta(), Constants.GEM_CONTAINER,
         GemContainer.class);
     if (grab == null) {
       return;
     }
     for (ExecutionPriority value : ExecutionPriority.values()) {
       grab.keySet().stream().map(gem -> Gem.getGem(gem.getNamespace()))
-          .filter(gem -> gem instanceof TriggerOnBreakEvent).map(gem -> (TriggerOnBreakEvent) gem)
+          .filter(gem -> gem instanceof ITriggerOnDrop).map(gem -> (ITriggerOnDrop) gem)
           .filter(triggerOnBlockDrop -> triggerOnBlockDrop.getPrio() == value)
-          .forEach(triggerOnBlockDrop -> triggerOnBlockDrop.execute(event,grab.getLevel(((Gem) triggerOnBlockDrop).getGemEnum())));
+          .forEach(triggerOnBlockDrop -> triggerOnBlockDrop.execute(event,
+              grab.getLevel(((Gem) triggerOnBlockDrop).getGemEnum())));
     }
-  }
-
-  private ItemStack getItemInUse(PlayerInventory inventory) {
-    return this.getItemInUse(inventory.getItemInMainHand(), inventory.getItemInOffHand());
-  }
-
-  private ItemStack getItemInUse(ItemStack main, ItemStack off) {
-    return main.getType().isAir() ? off : main;
   }
 }

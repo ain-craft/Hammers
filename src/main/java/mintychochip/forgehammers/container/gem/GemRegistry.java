@@ -24,8 +24,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 import mintychochip.forgehammers.container.gem.sub.AutoSmelt;
+import mintychochip.forgehammers.container.gem.sub.Compactor;
 import mintychochip.forgehammers.container.gem.sub.GoldDigger;
 import mintychochip.forgehammers.container.gem.sub.Magnetic;
+import mintychochip.forgehammers.container.gem.sub.VeinMiner;
 import mintychochip.genesis.util.Rarity;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
@@ -40,9 +42,14 @@ public class GemRegistry implements Registry<Gem> {
     this.register(
         new AutoSmelt(GemEnum.AUTO_SMELT, "Auto Smelt", "SMELT", 0, 3, Rarity.COMMON));
     this.register(
-        new Magnetic(GemEnum.MAGNETIC,"Magnetic","telekenis",0,1,Rarity.COMMON));
+        new Magnetic(GemEnum.MAGNETIC, "Magnetic", "telekenis", 0, 1, Rarity.COMMON));
     this.register(
-        new GoldDigger(GemEnum.GOLD_DIGGER,"Gold Digger", "asd",1,3,Rarity.COMMON));
+        new GoldDigger(GemEnum.GOLD_DIGGER, "Gold Digger", "asd", 1, 3, Rarity.COMMON));
+    this.register(
+        new VeinMiner(GemEnum.VEIN_MINER, "Vein", "asd", 1, 3, Rarity.COMMON));
+    this.register(
+        new Compactor(GemEnum.COMPACTOR, "compactor", "asd", 1, 3, Rarity.COMMON)
+    );
   }
 
   private final List<Gem> gems = new ArrayList<>();

@@ -21,20 +21,38 @@ package mintychochip.forgehammers.events;
 
 import java.util.Collection;
 import java.util.function.Consumer;
-import mintychochip.forgehammers.container.Tool;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class ToolBreakEvent extends FakeBreakEvent {
-  private final Tool tool;
-  public ToolBreakEvent(@NotNull Block block, @NotNull Player player, ItemStack item, Tool tool, Consumer<Collection<ItemStack>> drops) {
-    super(block, player, item,drops);
-    this.tool = tool;
+public abstract class FakeBreakEvent extends BlockBreakEvent {
+
+  private final ItemStack item;
+  private float hardness;
+
+  private final Consumer<Collection<ItemStack>> drops;
+  public FakeBreakEvent(@NotNull Block block,
+      @NotNull Player player, ItemStack item, Consumer<Collection<ItemStack>> drops) {
+    super(block, player);
+    this.item = item;
+    this.drops = drops;
   }
-  public Tool getTool() {
-    return tool;
+
+  public void accept(Collection<ItemStack> drops) {
+    this.drops.accept(drops);
+  }
+  public void setHardness(float hardness) {
+    this.hardness = hardness;
+  }
+
+  public float getHardness() {
+    return hardness;
+  }
+
+  public ItemStack getItem() {
+    return item;
   }
 }
