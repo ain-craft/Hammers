@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 import mintychochip.forgehammers.container.gem.sub.AutoSmelt;
 import mintychochip.forgehammers.container.gem.sub.Compactor;
 import mintychochip.forgehammers.container.gem.sub.GoldDigger;
+import mintychochip.forgehammers.container.gem.sub.HellForged;
 import mintychochip.forgehammers.container.gem.sub.Magnetic;
 import mintychochip.forgehammers.container.gem.sub.VeinMiner;
 import mintychochip.genesis.util.Rarity;
@@ -50,6 +51,8 @@ public class GemRegistry implements Registry<Gem> {
     this.register(
         new Compactor(GemEnum.COMPACTOR, "compactor", "asd", 1, 5, Rarity.COMMON)
     );
+    this.register(
+        new HellForged(GemEnum.HELL_FORGED,"hell forge","ASD",1,5,Rarity.COMMON));
   }
 
   private final List<Gem> gems = new ArrayList<>();

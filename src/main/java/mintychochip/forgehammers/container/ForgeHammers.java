@@ -26,13 +26,17 @@ import mintychochip.forgehammers.Constants;
 import mintychochip.forgehammers.GrasperImpl;
 import mintychochip.forgehammers.commands.ForgeHammerCreation;
 import mintychochip.forgehammers.commands.ForgeHammerRadius;
+import mintychochip.forgehammers.commands.GetGemCommand;
 import mintychochip.forgehammers.commands.SetGem;
 import mintychochip.forgehammers.commands.ToolInfo;
+import mintychochip.forgehammers.config.GemConfig;
 import mintychochip.forgehammers.config.HammerConfig;
 import mintychochip.forgehammers.container.gem.GemEnum;
 import mintychochip.forgehammers.container.gem.sub.listeners.BlockBreakEventListener;
+import mintychochip.forgehammers.container.gem.sub.listeners.CombustListener;
 import mintychochip.forgehammers.container.gem.sub.listeners.DropListener;
 import mintychochip.forgehammers.container.gem.sub.listeners.GemCreationListener;
+import mintychochip.forgehammers.listeners.DropItemListener;
 import mintychochip.forgehammers.listeners.HammerListener;
 import mintychochip.forgehammers.listeners.ItemStreamListener;
 import mintychochip.forgehammers.listeners.ToolBreakListener;
@@ -61,7 +65,7 @@ public final class ForgeHammers extends JavaPlugin {
     NamespacedKey hammerKey = new NamespacedKey(this, "hammer");
     GrasperImpl grasper = new GrasperImpl(hammerFactory, hammerKey);
     List<Listener> listeners = Arrays.asList(
-        new HammerListener(this, grasper), new GemCreationListener(this), new DropListener(this), new ToolBreakListener(this), new BlockBreakEventListener(this), new ItemStreamListener(this));
+        new HammerListener(this, grasper),new DropItemListener(this),new GemCreationListener(this), new CombustListener(this), new DropListener(this), new ToolBreakListener(this), new BlockBreakEventListener(this), new ItemStreamListener(this));
     HammerConfig hammerConfig = new HammerConfig("hammer.yml", this);
     GenericMainCommandManager genericMainCommandManager1 = new GenericMainCommandManager("gems",
         "asd");
@@ -69,6 +73,7 @@ public final class ForgeHammers extends JavaPlugin {
         Collectors.toSet())));
     GenericMainCommandManager genericMainCommandManager = new GenericMainCommandManager("forge",
         "asd");
+    genericMainCommandManager.addSubCommand(new GetGemCommand("gem","asd",new GemConfig("gem.yml",this)));
     genericMainCommandManager.addSubCommand(
         new ForgeHammerCreation("hammer", "asd", hammerConfig, grasper));
     genericMainCommandManager.addSubCommand(

@@ -25,7 +25,7 @@ import mintychochip.forgehammers.strategies.StrategySelector;
 public interface GemStrategySelector extends StrategySelector<GemStrategy, GemEnum> {
   default GemStrategy selectStrategy(GemEnum gemEnum) {
     return switch(gemEnum) {
-      case AUTO_SMELT, MAGNETIC -> gem -> 1;
+      case AUTO_SMELT, MAGNETIC, HELL_FORGED -> gem -> 1;
       case GOLD_DIGGER, VEIN_MINER, COMPACTOR -> new SimpleGemStrategy();
     };
   }

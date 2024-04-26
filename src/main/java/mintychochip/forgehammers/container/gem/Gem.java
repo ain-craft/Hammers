@@ -24,6 +24,7 @@ import java.util.List;
 import mintychochip.forgehammers.container.ForgeHammers;
 import mintychochip.forgehammers.container.Grasper;
 import mintychochip.forgehammers.container.gem.strategies.GemStrategySelector;
+import mintychochip.genesis.items.interfaces.Embeddable;
 import mintychochip.genesis.util.Rarity;
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
@@ -69,6 +70,10 @@ public abstract class Gem implements Keyed, GemStrategySelector {
     this.min = min;
     this.max = max;
     this.rarity = rarity;
+  }
+
+  public Rarity getRarity() {
+    return rarity;
   }
 
   public GemEnum getGemEnum() {

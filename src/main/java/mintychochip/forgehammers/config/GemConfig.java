@@ -17,10 +17,14 @@
  *
  */
 
-package mintychochip.forgehammers.listeners;
+package mintychochip.forgehammers.config;
 
-import java.net.http.WebSocket.Listener;
+import mintychochip.genesis.config.abstraction.GenericConfig;
+import org.bukkit.plugin.java.JavaPlugin;
 
-public class DropGemListener implements Listener {
+public class GemConfig extends GenericConfig {
+  public GemConfig(String path, JavaPlugin plugin) {
+    super(path, plugin);
+  }
 
 }

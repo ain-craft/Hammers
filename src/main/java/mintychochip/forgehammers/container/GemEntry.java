@@ -17,30 +17,21 @@
  *
  */
 
-package mintychochip.forgehammers.container.gem;
+package mintychochip.forgehammers.container;
 
-import mintychochip.forgehammers.container.ForgeHammers;
-import org.bukkit.Keyed;
+import mintychochip.forgehammers.container.gem.GemEnum;
+import mintychochip.genesis.items.interfaces.Embeddable;
 import org.bukkit.NamespacedKey;
-import org.jetbrains.annotations.NotNull;
 
-public enum GemEnum implements Keyed {
-  AUTO_SMELT("autosmelt"),
-  MAGNETIC("magnetic"),
-  GOLD_DIGGER("golddigger"),
-  VEIN_MINER("veinminer"),
-  COMPACTOR("compactor"),
-  HELL_FORGED("hell-forged");
-  private final String key;
-  GemEnum(String key) {
-    this.key = key;
-  }
+public record GemEntry (GemEnum gemEnum, int level) implements Embeddable {
 
-  public String getNamespace() {
-    return key;
-  }
   @Override
-  public @NotNull NamespacedKey getKey() {
-    return new NamespacedKey(ForgeHammers.getInstance(),key);
+  public NamespacedKey getKey() {
+    return gemEnum.getKey();
+  }
+
+  @Override
+  public String getSimpleKey() {
+    return gemEnum.getNamespace();
   }
 }

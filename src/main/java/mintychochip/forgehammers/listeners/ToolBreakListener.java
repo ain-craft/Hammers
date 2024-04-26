@@ -21,6 +21,7 @@ package mintychochip.forgehammers.listeners;
 
 import java.util.function.Predicate;
 import mintychochip.forgehammers.AbstractListener;
+import mintychochip.forgehammers.DurabilityReducer;
 import mintychochip.forgehammers.container.ForgeHammers;
 import mintychochip.forgehammers.container.MaterialConverter;
 import mintychochip.forgehammers.events.CreateItemEvent;
@@ -33,7 +34,8 @@ import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
-public class ToolBreakListener extends AbstractListener implements MaterialConverter {
+public class ToolBreakListener extends AbstractListener implements MaterialConverter,
+    DurabilityReducer {
 
   private static final int RANGE_ADJUSTMENT = 5;
   private final Predicate<FakeBreakEvent> blockUnbreakable = event -> {
@@ -56,7 +58,6 @@ public class ToolBreakListener extends AbstractListener implements MaterialConve
       event.setCancelled(true);
     }
   }
-
   @EventHandler(priority = EventPriority.MONITOR)
   private void onBreak(final FakeBreakEvent event) {
     if (event.isCancelled()) {

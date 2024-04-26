@@ -19,35 +19,51 @@
 
 package mintychochip.forgehammers.container.gem;
 
+import it.unimi.dsi.fastutil.Hash;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import mintychochip.forgehammers.container.ForgeHammers;
+import mintychochip.forgehammers.container.GemEntry;
 import mintychochip.genesis.items.interfaces.Embeddable;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 
 public class GemContainer implements Embeddable {
-  private final Map<GemEnum, Integer> gemMap = new HashMap<>();
+
+  private final List<GemEntry> entries = new ArrayList<>();
 
   public void add(Gem gem) {
-    gemMap.put(gem.getGemEnum(), gem.createValue());
+    this.add(gem.getGemEnum(), gem.createValue());
+  }
+
+  public void add(GemEnum gemEnum, int level) {
+    entries.add(new GemEntry(gemEnum, level));
   }
 
   public void remove(GemEnum gemEnum) {
-    gemMap.remove(gemEnum);
+    GemEntry entry = this.find(gemEnum);
+    if (entry != null) {
+      entries.remove(entry);
+    }
+  }
+
+  public GemEntry find(GemEnum gemEnum) {
+    return entries.stream().filter(gemEntry -> gemEntry.gemEnum() == gemEnum)
+        .findFirst().orElse(null);
   }
 
   public int getLevel(GemEnum gemEnum) {
-    return gemMap.get(gemEnum);
+    GemEntry entry = this.find(gemEnum);
+    return entry.level();
   }
-
-  public boolean has(GemEnum gemEnum) {
-    return gemMap.containsKey(gemEnum);
-  }
-  public Set<GemEnum> keySet() {
-    return gemMap.keySet();
+  public Collection<GemEnum> keySet() {
+    return entries.stream().map(GemEntry::gemEnum).toList();
   }
   public NamespacedKey getKey() {
     return new NamespacedKey(ForgeHammers.getInstance(), this.getSimpleKey());
